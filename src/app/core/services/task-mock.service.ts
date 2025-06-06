@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Task } from '../models/task';
 import { v4 as uuidv4 } from 'uuid';
+import { Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -36,43 +37,46 @@ export class TaskMockService {
     },
   ];
 
-  // Get all tasks
-  getTasks(): Task[] {
-    return [...this.tasks];
+  // Get all tasks as Observable
+  getTasks(): Observable<Task[]> {
+    return of([...this.tasks]); // Wrap in Observable using of()
   }
 
-  // Get task by ID
-  getTaskById(id: string): Task | undefined {
-    return this.tasks.find((task) => task.id === id);
+  // Get task by ID as Observable
+  getTaskById(id: string): Observable<Task | undefined> {
+    return of(this.tasks.find((task) => task.id === id));
   }
 
-  // Add a new task
-  addTask(task: Omit<Task, 'id'>): Task {
+  // Add a new task as Observable
+  addTask(task: Omit<Task, 'id'>): Observable<Task> {
     const newTask: Task = {
       id: uuidv4(),
       ...task,
     };
     this.tasks.push(newTask);
-    return newTask;
+    return of(newTask);
   }
 
-  // Update an existing task
-  updateTask(id: string, updatedTask: Partial<Task>): Task | undefined {
+  // Update task as Observable
+  updateTask(
+    id: string,
+    updatedTask: Partial<Task>
+  ): Observable<Task | undefined> {
     const taskIndex = this.tasks.findIndex((task) => task.id === id);
     if (taskIndex !== -1) {
       this.tasks[taskIndex] = { ...this.tasks[taskIndex], ...updatedTask };
-      return this.tasks[taskIndex];
+      return of(this.tasks[taskIndex]);
     }
-    return undefined;
+    return of(undefined);
   }
 
-  // Delete a task
-  deleteTask(id: string): boolean {
+  // Delete task as Observable
+  deleteTask(id: string): Observable<boolean> {
     const taskIndex = this.tasks.findIndex((task) => task.id === id);
     if (taskIndex !== -1) {
       this.tasks.splice(taskIndex, 1);
-      return true;
+      return of(true);
     }
-    return false;
+    return of(false);
   }
 }

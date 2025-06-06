@@ -1,11 +1,19 @@
 <h1>Task List</h1>
-<div *ngFor="let task of tasks">
-  <h3>{{ task.title }}</h3>
-  <p>ID: {{ task.id }}</p>
-  <p>Description: {{ task.description }}</p>
-  <p>Priority: {{ task.priority }}</p>
-  <p>Due Date: {{ task.dueDate }}</p>
-  <p>Status: {{ task.status }}</p>
-  <p>Category: {{ task.category }}</p>
-  <hr />
+<div *ngIf="loading$ | async; else taskList">
+  <p>Loading tasks...</p>
 </div>
+<ng-template #taskList>
+  <div *ngIf="error$ | async as error">
+    <p>Error: {{ error }}</p>
+  </div>
+  <div *ngFor="let task of tasks$ | async">
+    <h3>{{ task.title }}</h3>
+    <p>ID: {{ task.id }}</p>
+    <p>Description: {{ task.description }}</p>
+    <p>Priority: {{ task.priority }}</p>
+    <p>Due Date: {{ task.dueDate }}</p>
+    <p>Status: {{ task.status }}</p>
+    <p>Category: {{ task.category }}</p>
+    <hr />
+  </div>
+</ng-template>
