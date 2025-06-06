@@ -1,0 +1,9 @@
+mat-toolbar {
+  justify-content: space-between;
+}
+
+
+.mat-toolbar.mat-primary {
+  background-color: rgb(25, 118, 210); /* Example shade */
+  color: rgb(255, 255, 255);
+}
