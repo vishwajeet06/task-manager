@@ -12,6 +12,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { TaskEffects } from './core/state/task.effects';
 import { taskReducer } from './core/state/task.reducer';
+import { MatNativeDateModule } from '@angular/material/core';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -22,5 +23,6 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom(EffectsModule.forRoot([TaskEffects])),
     provideStoreDevtools({ maxAge: 25, logOnly: false }),
     provideCharts(withDefaultRegisterables()),
+    importProvidersFrom(MatNativeDateModule),
   ],
 };

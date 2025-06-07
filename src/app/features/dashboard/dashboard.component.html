@@ -1,1 +1,31 @@
-<h1>Dashboard Placeholder</h1>
+<h1>Dashboard</h1>
+      <div *ngIf="loading$ | async; else charts">
+        <p>Loading tasks...</p>
+      </div>
+      <ng-template #charts>
+        <div *ngIf="error$ | async as error">
+          <p>Error: {{ error }}</p>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+          <div style="width: 400px;">
+            <h2>Tasks by Status</h2>
+            <div style="position: relative;">
+              <canvas baseChart
+                      [data]="statusChartData"
+                      [options]="statusChartOptions"
+                      [type]="statusChartType">
+              </canvas>
+            </div>
+          </div>
+          <div style="width: 400px;">
+            <h2>Tasks by Priority</h2>
+            <div style="position: relative;">
+              <canvas baseChart
+                      [data]="priorityChartData"
+                      [options]="priorityChartOptions"
+                      [type]="priorityChartType">
+              </canvas>
+            </div>
+          </div>
+        </div>
+      </ng-template>
