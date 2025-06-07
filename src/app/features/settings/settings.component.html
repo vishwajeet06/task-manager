@@ -1,1 +1,53 @@
-<h1>Setting Placeholder</h1>
+<h1>Settings</h1>
+<div *ngIf="userData$ | async as userData">
+  <h2>User Profile</h2>
+  <form #profileForm="ngForm">
+    <mat-form-field appearance="fill">
+      <mat-label>Name</mat-label>
+      <input matInput [(ngModel)]="profile.name" name="name" required />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Email</mat-label>
+      <input
+        matInput
+        [(ngModel)]="profile.email"
+        name="email"
+        type="email"
+        required
+      />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Role</mat-label>
+      <input matInput [(ngModel)]="profile.role" name="role" required />
+    </mat-form-field>
+  </form>
+
+  <h2>Account Settings</h2>
+  <form #settingsForm="ngForm">
+    <mat-slide-toggle
+      [(ngModel)]="settings.notificationsEnabled"
+      name="notificationsEnabled"
+    >
+      Email Notifications
+    </mat-slide-toggle>
+    <mat-form-field appearance="fill">
+      <mat-label>Timezone</mat-label>
+      <mat-select [(ngModel)]="settings.timezone" name="timezone" required>
+        <mat-option value="UTC">UTC</mat-option>
+        <mat-option value="America/New_York">America/New_York</mat-option>
+        <mat-option value="Asia/Kolkata">Asia/Kolkata</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
+
+  <div style="margin-top: 20px">
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="saveSettings()"
+      [disabled]="!profileForm.valid || !settingsForm.valid"
+    >
+      Save
+    </button>
+  </div>
+</div>
