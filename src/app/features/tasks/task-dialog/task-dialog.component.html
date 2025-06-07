@@ -1,43 +1,56 @@
-<h2 mat-dialog-title>{{ data ? 'Edit Task' : 'Add Task' }}</h2>
-         <mat-dialog-content>
-           <form #taskForm="ngForm">
-             <mat-form-field appearance="fill">
-               <mat-label>Title</mat-label>
-               <input matInput [(ngModel)]="task.title" name="title" required />
-             </mat-form-field>
-             <mat-form-field appearance="fill">
-               <mat-label>Description</mat-label>
-               <textarea matInput [(ngModel)]="task.description" name="description" required></textarea>
-             </mat-form-field>
-             <mat-form-field appearance="fill">
-               <mat-label>Priority</mat-label>
-               <mat-select [(ngModel)]="task.priority" name="priority" required>
-                 <mat-option value="Low">Low</mat-option>
-                 <mat-option value="Medium">Medium</mat-option>
-                 <mat-option value="High">High</mat-option>
-               </mat-select>
-             </mat-form-field>
-             <mat-form-field appearance="fill">
-               <mat-label>Due Date</mat-label>
-               <input matInput [matDatepicker]="picker" [(ngModel)]="dueDate" name="dueDate" required />
-               <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-               <mat-datepicker #picker></mat-datepicker>
-             </mat-form-field>
-             <mat-form-field appearance="fill">
-               <mat-label>Status</mat-label>
-               <mat-select [(ngModel)]="task.status" name="status" required>
-                 <mat-option value="To Do">To Do</mat-option>
-                 <mat-option value="In Progress">In Progress</mat-option>
-                 <mat-option value="Completed">Completed</mat-option>
-               </mat-select>
-             </mat-form-field>
-             <mat-form-field appearance="fill">
-               <mat-label>Category</mat-label>
-               <input matInput [(ngModel)]="task.category" name="category" required />
-             </mat-form-field>
-           </form>
-         </mat-dialog-content>
-         <mat-dialog-actions>
-           <button mat-button (click)="onCancel()">Cancel</button>
-           <button mat-button [disabled]="!taskForm.valid" (click)="onSave()">Save</button>
-         </mat-dialog-actions>
+<h2 mat-dialog-title>{{ data ? "Edit Task" : "Add Task" }}</h2>
+<mat-dialog-content>
+  <form #taskForm="ngForm">
+    <mat-form-field appearance="fill">
+      <mat-label>Title</mat-label>
+      <input matInput [(ngModel)]="task.title" name="title" required />
+    </mat-form-field>
+    
+      <mat-label>Description</mat-label>
+      <quill-editor
+        [(ngModel)]="task.description"
+        name="description"
+        [modules]="quillConfig"
+        [required]="true"
+      ></quill-editor>
+    
+    <mat-form-field appearance="fill">
+      <mat-label>Priority</mat-label>
+      <mat-select [(ngModel)]="task.priority" name="priority" required>
+        <mat-option value="Low">Low</mat-option>
+        <mat-option value="Medium">Medium</mat-option>
+        <mat-option value="High">High</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Due Date</mat-label>
+      <input
+        matInput
+        [matDatepicker]="picker"
+        [(ngModel)]="dueDate"
+        name="dueDate"
+        required
+      />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Status</mat-label>
+      <mat-select [(ngModel)]="task.status" name="status" required>
+        <mat-option value="To Do">To Do</mat-option>
+        <mat-option value="In Progress">In Progress</mat-option>
+        <mat-option value="Completed">Completed</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Category</mat-label>
+      <input matInput [(ngModel)]="task.category" name="category" required />
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-button [disabled]="!taskForm.valid" (click)="onSave()">
+    Save
+  </button>
+</mat-dialog-actions>

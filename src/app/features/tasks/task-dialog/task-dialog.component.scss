@@ -5,3 +5,22 @@ mat-form-field {
 mat-dialog-actions {
   justify-content: flex-end;
 }
+quill-editor {
+  display: block;
+  margin-bottom: 15px;
+}
+.ql-container {
+  min-height: 150px;
+}
+
+/* task-dialog.component.scss */
+quill-editor {
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 4px;
+  padding: 8px;
+  margin-bottom: 16px;
+  background: white;
+  &:focus-within {
+    border-color: #3f51b5;
+  }
+}

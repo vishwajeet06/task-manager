@@ -1,5 +1,10 @@
+import { QuillModule } from 'ngx-quill';
 import { Component, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import {
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+  MatDialogModule,
+} from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -21,6 +26,7 @@ import { Task } from '../../../core/models/task';
     MatNativeDateModule,
     MatButtonModule,
     FormsModule,
+    QuillModule,
   ],
   templateUrl: './task-dialog.component.html',
   styleUrl: './task-dialog.component.scss',
@@ -28,6 +34,14 @@ import { Task } from '../../../core/models/task';
 export class TaskDialogComponent {
   task: Omit<Task, 'id'>;
   dueDate: Date;
+  quillConfig = {
+    toolbar: [
+      ['bold', 'italic', 'underline'],
+      [{ list: 'ordered' }, { list: 'bullet' }],
+      ['link'],
+      ['clean'],
+    ],
+  };
 
   constructor(
     public dialogRef: MatDialogRef<TaskDialogComponent>,
