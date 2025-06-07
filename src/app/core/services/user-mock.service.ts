@@ -17,6 +17,10 @@ export interface UserData {
   settings: AccountSettings;
 }
 
+export interface TeamMember {
+  name: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -33,6 +37,13 @@ export class UserMockService {
     },
   };
 
+  private teamMembers: TeamMember[] = [
+    { name: 'John Doe' },
+    { name: 'Jane Doe' },
+    { name: 'Alice Smith' },
+    { name: 'Bob Johnson' },
+  ];
+
   getUserData(): Observable<UserData> {
     return of(this.userData);
   }
@@ -40,5 +51,9 @@ export class UserMockService {
   updateUserData(data: UserData): Observable<UserData> {
     this.userData = { ...this.userData, ...data };
     return of(this.userData);
+  }
+
+  getTeamMembers(): Observable<TeamMember[]> {
+    return of(this.teamMembers);
   }
 }

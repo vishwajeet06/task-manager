@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 // import { Chart } from 'chart.js';
 import Chart, { ChartConfiguration } from 'chart.js/auto';
 import { Observable } from 'rxjs';
-import { Task } from '../../core/models/task';
+import { PriorityCounts, StatusCounts, Task } from '../../core/models/task';
 import { TaskActions } from '../../core/state/task.actions';
 import { selectAllTasks, selectTasksLoading, selectTasksError } from '../../core/state/task.selectors';
 import { CommonModule } from '@angular/common';
@@ -22,31 +22,15 @@ export class DashboardComponent implements OnInit {
   loading$!: Observable<boolean>;
   error$!: Observable<string | null>;
 
-  statusChartType: 'pie' = 'pie';
-  priorityChartType: 'pie' = 'pie';
-  statusChartData!: ChartConfiguration<'pie'>['data'];
-  priorityChartData!: ChartConfiguration<'pie'>['data'];
-  statusChartOptions: ChartConfiguration<'pie'>['options'] = {
+  statusChartData!: ChartConfiguration['data'];
+  priorityChartData!: ChartConfiguration['data'];
+  statusChartType: ChartConfiguration['type'] = 'pie';
+  priorityChartType: ChartConfiguration['type'] = 'pie';
+  chartOptions: ChartConfiguration['options'] = {
     responsive: true,
     plugins: {
       legend: {
         position: 'top',
-      },
-      title: {
-        display: true,
-        text: 'Tasks by Status',
-      },
-    },
-  };
-  priorityChartOptions: ChartConfiguration<'pie'>['options'] = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: 'top',
-      },
-      title: {
-        display: true,
-        text: 'Tasks by Priority',
       },
     },
   };
@@ -57,60 +41,59 @@ export class DashboardComponent implements OnInit {
     this.tasks$ = this.store.select(selectAllTasks);
     this.loading$ = this.store.select(selectTasksLoading);
     this.error$ = this.store.select(selectTasksError);
-    this.store.dispatch(TaskActions.loadTasks());
 
     this.tasks$.subscribe((tasks) => {
-      this.updateCharts(tasks);
+      const statusCounts: StatusCounts = {
+        'To Do': 0,
+        'In Progress': 0,
+        'In Review': 0,
+        Completed: 0,
+      };
+
+      tasks.forEach((task) => {
+        statusCounts[task.status]++;
+      });
+
+      this.statusChartData = {
+        labels: ['To Do', 'In Progress', 'In Review', 'Completed'],
+        datasets: [
+          {
+            data: [
+              statusCounts['To Do'],
+              statusCounts['In Progress'],
+              statusCounts['In Review'],
+              statusCounts['Completed'],
+            ],
+            backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0'],
+          },
+        ],
+      };
+
+      const priorityCounts: PriorityCounts = {
+        Low: 0,
+        Medium: 0,
+        High: 0,
+        Critical: 0,
+      };
+
+      tasks.forEach((task) => {
+        priorityCounts[task.priority]++;
+      });
+
+      this.priorityChartData = {
+        labels: ['Low', 'Medium', 'High', 'Critical'],
+        datasets: [
+          {
+            data: [
+              priorityCounts['Low'],
+              priorityCounts['Medium'],
+              priorityCounts['High'],
+              priorityCounts['Critical'],
+            ],
+            backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#FF9F40'],
+          },
+        ],
+      };
     });
-  }
-
-  updateCharts(tasks: Task[]) {
-    // Tasks by Status
-    const statusCounts = {
-      'To Do': 0,
-      'In Progress': 0,
-      Completed: 0,
-    };
-    tasks.forEach((task) => {
-      statusCounts[task.status]++;
-    });
-
-    this.statusChartData = {
-      labels: ['To Do', 'In Progress', 'Completed'],
-      datasets: [
-        {
-          data: [
-            statusCounts['To Do'],
-            statusCounts['In Progress'],
-            statusCounts['Completed'],
-          ],
-          backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-        },
-      ],
-    };
-
-    // Tasks by Priority
-    const priorityCounts = {
-      Low: 0,
-      Medium: 0,
-      High: 0,
-    };
-    tasks.forEach((task) => {
-      priorityCounts[task.priority]++;
-    });
-
-    this.priorityChartData = {
-      labels: ['Low', 'Medium', 'High'],
-      datasets: [
-        {
-          data: [
-            priorityCounts['Low'],
-            priorityCounts['Medium'],
-            priorityCounts['High'],
-          ],
-          backgroundColor: ['#4CAF50', '#FFC107', '#F44336'],
-        },
-      ],
-    };
   }
 }

@@ -17,6 +17,7 @@ import { TaskDialogComponent } from '../task-dialog/task-dialog.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from '@angular/common';
+import { MatChipsModule } from '@angular/material/chips';
 
 @Component({
   selector: 'app-task-list',
@@ -30,6 +31,7 @@ import { CommonModule } from '@angular/common';
     MatDialogModule,
     MatFormFieldModule,
     MatInputModule,
+    MatChipsModule,
   ],
   templateUrl: './task-list.component.html',
   styleUrl: './task-list.component.scss',
@@ -46,6 +48,9 @@ export class TaskListComponent implements OnInit {
     'dueDate',
     'status',
     'category',
+    'tags',
+    'assignedTo',
+    'attachments',
     'actions',
   ];
 
@@ -84,7 +89,9 @@ export class TaskListComponent implements OnInit {
       .afterClosed()
       .subscribe((result: Omit<Task, 'id'> | undefined) => {
         if (result) {
-          this.store.dispatch(TaskActions.addTask({ task: result }));
+          this.store.dispatch(
+            TaskActions.addTask({ task: result as Omit<Task, 'id'> })
+          );
         }
       });
   }
@@ -100,7 +107,10 @@ export class TaskListComponent implements OnInit {
       .subscribe((result: Omit<Task, 'id'> | undefined) => {
         if (result) {
           this.store.dispatch(
-            TaskActions.updateTask({ id: task.id, task: result })
+            TaskActions.updateTask({
+              id: task.id,
+              task: result as Omit<Task, 'id'>,
+            })
           );
         }
       });

@@ -9,74 +9,64 @@ import { Observable, of } from 'rxjs';
 export class TaskMockService {
   private tasks: Task[] = [
     {
-      id: uuidv4(),
+      id: '1',
       title: 'Design Homepage',
       description: 'Create wireframes and mockups for the homepage.',
       priority: 'High',
       dueDate: '2025-06-10',
+      status: 'To Do',
+      category: 'Work',
+      tags: ['design', 'ui'],
+      assignedTo: 'John Doe',
+      attachments: [],
+    },
+    {
+      id: '2',
+      title: 'Write Documentation',
+      description: 'Document the API endpoints and usage.',
+      priority: 'Medium',
+      dueDate: '2025-06-15',
       status: 'In Progress',
       category: 'Work',
+      tags: ['docs', 'api'],
+      assignedTo: 'Jane Doe',
+      attachments: [{ name: 'api-spec.pdf', size: 102400 }],
     },
     {
-      id: uuidv4(),
-      title: 'Grocery Shopping',
-      description: 'Buy groceries for the week.',
-      priority: 'Medium',
-      dueDate: '2025-06-08',
-      status: 'To Do',
-      category: 'Personal',
-    },
-    {
-      id: uuidv4(),
-      title: 'Finish Report',
-      description: 'Complete the quarterly financial report.',
+      id: '3',
+      title: 'Plan Vacation',
+      description: 'Book flights and hotels for summer vacation.',
       priority: 'High',
-      dueDate: '2025-06-12',
+      dueDate: '2025-06-20',
       status: 'Completed',
-      category: 'Work',
+      category: 'Personal',
+      tags: ['travel', 'vacation'],
+      assignedTo: 'John Doe',
+      attachments: [],
     },
   ];
 
-  // Get all tasks as Observable
   getTasks(): Observable<Task[]> {
-    return of([...this.tasks]); // Wrap in Observable using of()
+    return of(this.tasks);
   }
 
-  // Get task by ID as Observable
-  getTaskById(id: string): Observable<Task | undefined> {
-    return of(this.tasks.find((task) => task.id === id));
-  }
-
-  // Add a new task as Observable
   addTask(task: Omit<Task, 'id'>): Observable<Task> {
-    const newTask: Task = {
-      id: uuidv4(),
-      ...task,
-    };
+    const newTask: Task = { ...task, id: uuidv4() };
     this.tasks.push(newTask);
     return of(newTask);
   }
 
-  // Update task as Observable
-  updateTask(
-    id: string,
-    updatedTask: Partial<Task>
-  ): Observable<Task | undefined> {
-    const taskIndex = this.tasks.findIndex((task) => task.id === id);
-    if (taskIndex !== -1) {
-      this.tasks[taskIndex] = { ...this.tasks[taskIndex], ...updatedTask };
-      return of(this.tasks[taskIndex]);
+  updateTask(id: string, task: Omit<Task, 'id'>): Observable<Task> {
+    const index = this.tasks.findIndex((t) => t.id === id);
+    if (index !== -1) {
+      this.tasks[index] = { ...task, id };
+      return of(this.tasks[index]);
     }
-    return of(undefined);
+    throw new Error('Task not found');
   }
 
-  // Delete task as Observable
-  deleteTask(id: string): Observable<boolean> {
-    const taskIndex = this.tasks.findIndex((task) => task.id === id);
-    if (taskIndex !== -1) {
-      this.tasks.splice(taskIndex, 1);
-      return of(true);
-    }
-    return of(false);
+  deleteTask(id: string): Observable<void> {
+    this.tasks = this.tasks.filter((t) => t.id !== id);
+    return of(void 0);
   }
 }

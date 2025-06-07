@@ -5,21 +5,22 @@
       <mat-label>Title</mat-label>
       <input matInput [(ngModel)]="task.title" name="title" required />
     </mat-form-field>
-    
+    <div class="custom-form-field">
       <mat-label>Description</mat-label>
       <quill-editor
         [(ngModel)]="task.description"
         name="description"
-        [modules]="quillConfig"
         [required]="true"
+        [modules]="quillConfig"
       ></quill-editor>
-    
+    </div>
     <mat-form-field appearance="fill">
       <mat-label>Priority</mat-label>
       <mat-select [(ngModel)]="task.priority" name="priority" required>
         <mat-option value="Low">Low</mat-option>
         <mat-option value="Medium">Medium</mat-option>
         <mat-option value="High">High</mat-option>
+        <mat-option value="Critical">Critical</mat-option>
       </mat-select>
     </mat-form-field>
     <mat-form-field appearance="fill">
@@ -39,6 +40,7 @@
       <mat-select [(ngModel)]="task.status" name="status" required>
         <mat-option value="To Do">To Do</mat-option>
         <mat-option value="In Progress">In Progress</mat-option>
+        <mat-option value="In Review">In Review</mat-option>
         <mat-option value="Completed">Completed</mat-option>
       </mat-select>
     </mat-form-field>
@@ -46,6 +48,46 @@
       <mat-label>Category</mat-label>
       <input matInput [(ngModel)]="task.category" name="category" required />
     </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Tags (comma-separated)</mat-label>
+      <input
+        matInput
+        [(ngModel)]="tagsInput"
+        name="tags"
+        (ngModelChange)="updateTags()"
+      />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Assigned To</mat-label>
+      <mat-select [(ngModel)]="task.assignedTo" name="assignedTo" required>
+        <mat-option
+          *ngFor="let member of teamMembers$ | async"
+          [value]="member.name"
+        >
+          {{ member.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <div class="custom-form-field">
+      <mat-label>Attachments</mat-label>
+      <input
+        type="file"
+        (change)="handleFileInput($event)"
+        multiple
+        style="display: block"
+      />
+    </div>
+    <div *ngIf="task.attachments.length > 0">
+      <h4>Attached Files:</h4>
+      <ul>
+        <li *ngFor="let attachment of task.attachments">
+          {{ attachment.name }} ({{ attachment.size | number }} bytes)
+          <button mat-icon-button (click)="removeAttachment(attachment)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </li>
+      </ul>
+    </div>
   </form>
 </mat-dialog-content>
 <mat-dialog-actions>

@@ -1,71 +1,78 @@
-import { Injectable, inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { TaskMockService } from '../services/task-mock.service';
 import { TaskActions } from './task.actions';
-import { catchError, map, mergeMap, tap } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { catchError, map, mergeMap, of } from 'rxjs';
+import { Task } from '../models/task';
 
 @Injectable()
 export class TaskEffects {
   private readonly actions$ = inject(Actions);
-  private readonly taskMockService = inject(TaskMockService);
+  private readonly taskService = inject(TaskMockService);
 
   loadTasks$ = createEffect(() =>
     this.actions$.pipe(
       ofType(TaskActions.loadTasks),
-      mergeMap(() => {
-        console.log('Effect triggered: Loading tasks...');
-        return this.taskMockService.getTasks().pipe(
+      mergeMap(() =>
+        this.taskService.getTasks().pipe(
           map((tasks) => TaskActions.loadTasksSuccess({ tasks })),
-          catchError((error: any) =>
-            of(
-              TaskActions.loadTasksFailure({
-                error: error.message || 'Unknown error',
-              })
-            )
+          catchError((error) =>
+            of(TaskActions.loadTasksFailure({ error: error.message }))
           )
-        );
-      })
+        )
+      )
     )
   );
 
   addTask$ = createEffect(() =>
     this.actions$.pipe(
       ofType(TaskActions.addTask),
-      mergeMap(({ task }) =>
-        this.taskMockService.addTask(task).pipe(
+      mergeMap(({ task }) => {
+        const completeTask: Omit<Task, 'id'> = {
+          title: task.title ?? '',
+          description: task.description ?? '',
+          priority: task.priority ?? 'Medium',
+          dueDate: task.dueDate ?? new Date().toISOString().split('T')[0],
+          status: task.status ?? 'To Do',
+          category: task.category ?? '',
+          tags: task.tags ?? [],
+          assignedTo: task.assignedTo ?? '',
+          attachments: task.attachments ?? [],
+        };
+        return this.taskService.addTask(completeTask).pipe(
           map((newTask) => TaskActions.addTaskSuccess({ task: newTask })),
-          catchError((error: any) =>
-            of(
-              TaskActions.addTaskFailure({
-                error: error.message || 'Unknown error',
-              })
-            )
+          catchError((error) =>
+            of(TaskActions.addTaskFailure({ error: error.message }))
           )
-        )
-      )
+        );
+      })
     )
   );
 
   updateTask$ = createEffect(() =>
     this.actions$.pipe(
       ofType(TaskActions.updateTask),
-      mergeMap(({ id, task }) =>
-        this.taskMockService.updateTask(id, task).pipe(
+      mergeMap(({ id, task }) => {
+        const completeTask: Omit<Task, 'id'> = {
+          title: task.title ?? '',
+          description: task.description ?? '',
+          priority: task.priority ?? 'Medium',
+          dueDate: task.dueDate ?? new Date().toISOString().split('T')[0],
+          status: task.status ?? 'To Do',
+          category: task.category ?? '',
+          tags: task.tags ?? [],
+          assignedTo: task.assignedTo ?? '',
+          attachments: task.attachments ?? [],
+        };
+        return this.taskService.updateTask(id, completeTask).pipe(
           map((updatedTask) =>
-            updatedTask
-              ? TaskActions.updateTaskSuccess({ task: updatedTask })
-              : TaskActions.updateTaskFailure({ error: 'Task not found' })
+            TaskActions.updateTaskSuccess({ id, task: updatedTask })
           ),
-          catchError((error: any) =>
-            of(
-              TaskActions.updateTaskFailure({
-                error: error.message || 'Unknown error',
-              })
-            )
+          catchError((error) =>
+            of(TaskActions.updateTaskFailure({ error: error.message }))
           )
-        )
-      )
+        );
+      })
     )
   );
 
@@ -73,18 +80,10 @@ export class TaskEffects {
     this.actions$.pipe(
       ofType(TaskActions.deleteTask),
       mergeMap(({ id }) =>
-        this.taskMockService.deleteTask(id).pipe(
-          map((success) =>
-            success
-              ? TaskActions.deleteTaskSuccess({ id })
-              : TaskActions.deleteTaskFailure({ error: 'Task not found' })
-          ),
-          catchError((error: any) =>
-            of(
-              TaskActions.deleteTaskFailure({
-                error: error.message || 'Unknown error',
-              })
-            )
+        this.taskService.deleteTask(id).pipe(
+          map(() => TaskActions.deleteTaskSuccess({ id })),
+          catchError((error) =>
+            of(TaskActions.deleteTaskFailure({ error: error.message }))
           )
         )
       )

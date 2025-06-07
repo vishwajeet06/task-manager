@@ -12,3 +12,12 @@ td[innerHTML] {
   max-height: 100px;
   overflow-y: auto;
 }
+mat-chip-listbox {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+ul {
+  padding-left: 20px;
+  margin: 0;
+}

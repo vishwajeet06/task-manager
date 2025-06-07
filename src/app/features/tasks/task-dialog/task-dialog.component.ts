@@ -13,6 +13,13 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { Task } from '../../../core/models/task';
+import { Observable } from 'rxjs';
+import {
+  TeamMember,
+  UserMockService,
+} from '../../../core/services/user-mock.service';
+import { MatIcon } from '@angular/material/icon';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-task-dialog',
@@ -27,6 +34,8 @@ import { Task } from '../../../core/models/task';
     MatButtonModule,
     FormsModule,
     QuillModule,
+    MatIcon,
+    CommonModule,
   ],
   templateUrl: './task-dialog.component.html',
   styleUrl: './task-dialog.component.scss',
@@ -42,11 +51,16 @@ export class TaskDialogComponent {
       ['clean'],
     ],
   };
+  teamMembers$!: Observable<TeamMember[]>;
+  tagsInput: string = '';
 
   constructor(
     public dialogRef: MatDialogRef<TaskDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: Task | null
+    @Inject(MAT_DIALOG_DATA) public data: Task | null,
+    private userService: UserMockService
   ) {
+    this.teamMembers$ = this.userService.getTeamMembers();
+
     if (data) {
       this.task = {
         title: data.title,
@@ -55,8 +69,12 @@ export class TaskDialogComponent {
         dueDate: data.dueDate,
         status: data.status,
         category: data.category,
+        tags: data.tags,
+        assignedTo: data.assignedTo,
+        attachments: data.attachments,
       };
       this.dueDate = new Date(data.dueDate);
+      this.tagsInput = data.tags.join(', ');
     } else {
       this.task = {
         title: '',
@@ -65,9 +83,37 @@ export class TaskDialogComponent {
         dueDate: '',
         status: 'To Do',
         category: '',
+        tags: [],
+        assignedTo: '',
+        attachments: [],
       };
       this.dueDate = new Date();
     }
+  }
+
+  updateTags() {
+    this.task.tags = this.tagsInput
+      .split(',')
+      .map((tag) => tag.trim())
+      .filter((tag) => tag);
+  }
+
+  handleFileInput(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files) {
+      const newAttachments = Array.from(input.files).map((file) => ({
+        name: file.name,
+        size: file.size,
+      }));
+      this.task.attachments = [...this.task.attachments, ...newAttachments];
+      input.value = ''; // Reset the input
+    }
+  }
+
+  removeAttachment(attachment: { name: string; size: number }) {
+    this.task.attachments = this.task.attachments.filter(
+      (att) => att !== attachment
+    );
   }
 
   onCancel(): void {
