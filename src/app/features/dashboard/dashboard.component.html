@@ -1,31 +1,53 @@
 <h1>Dashboard</h1>
-<div *ngIf="loading$ | async; else dashboardContent">
-  <p>Loading tasks...</p>
-</div>
-<ng-template #dashboardContent>
-  <div *ngIf="error$ | async as error">
-    <p>Error: {{ error }}</p>
-  </div>
-  <div style="display: flex; justify-content: space-around; flex-wrap: wrap">
-    <div style="width: 300px; margin: 20px">
-      <h2>Tasks by Status</h2>
-      <canvas
-        baseChart
-        [data]="statusChartData"
-        [type]="statusChartType"
-        [options]="chartOptions"
-      >
-      </canvas>
-    </div>
-    <div style="width: 300px; margin: 20px">
-      <h2>Tasks by Priority</h2>
-      <canvas
-        baseChart
-        [data]="priorityChartData"
-        [type]="priorityChartType"
-        [options]="chartOptions"
-      >
-      </canvas>
-    </div>
-  </div>
-</ng-template>
+      <div *ngIf="loading$ | async; else dashboardContent">
+        <p>Loading tasks...</p>
+      </div>
+      <ng-template #dashboardContent>
+        <div *ngIf="error$ | async as error">
+          <p>Error: {{ error }}</p>
+        </div>
+        <div class="metrics">
+          <div class="metric-card">
+            <h3>Total Tasks</h3>
+            <p>{{ totalTasks$ | async }}</p>
+          </div>
+          <div class="metric-card">
+            <h3>Completed Tasks</h3>
+            <p>{{ completedTasks$ | async }}</p>
+          </div>
+          <div class="metric-card">
+            <h3>Overdue Tasks</h3>
+            <p>{{ overdueTasks$ | async }}</p>
+          </div>
+        </div>
+        <div style="display: flex; justify-content: space-around; flex-wrap: wrap;">
+          <div style="width: 300px; margin: 20px;">
+            <h2>Tasks by Status</h2>
+            <canvas baseChart
+              [data]="statusChartData"
+              [type]="statusChartType"
+              [options]="chartOptions">
+            </canvas>
+          </div>
+          <div style="width: 300px; margin: 20px;">
+            <h2>Tasks by Priority</h2>
+            <canvas baseChart
+              [data]="priorityChartData"
+              [type]="priorityChartType"
+              [options]="chartOptions">
+            </canvas>
+          </div>
+        </div>
+        <div class="timeline">
+          <h2>Recent Activity</h2>
+          <div *ngIf="(activities$ | async)?.length === 0">
+            <p>No recent activity.</p>
+          </div>
+          <ul>
+            <li *ngFor="let activity of activities$ | async">
+              <span class="timestamp">{{ activity.timestamp | date:'medium' }}</span>
+              <span class="message">{{ activity.message }}</span>
+            </li>
+          </ul>
+        </div>
+      </ng-template>

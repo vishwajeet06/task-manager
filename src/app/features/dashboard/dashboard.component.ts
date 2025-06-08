@@ -5,9 +5,11 @@ import Chart, { ChartConfiguration } from 'chart.js/auto';
 import { Observable } from 'rxjs';
 import { PriorityCounts, StatusCounts, Task } from '../../core/models/task';
 import { TaskActions } from '../../core/state/task.actions';
-import { selectAllTasks, selectTasksLoading, selectTasksError } from '../../core/state/task.selectors';
+import { selectAllTasks, selectTasksLoading, selectTasksError, selectTotalTasks, selectCompletedTasks, selectOverdueTasks } from '../../core/state/task.selectors';
 import { CommonModule } from '@angular/common';
 import { BaseChartDirective, provideCharts, withDefaultRegisterables } from 'ng2-charts';
+import { Activity } from '../../core/models/activity';
+import { selectActivities } from '../../core/state/activity.selectors';
 
 @Component({
   selector: 'app-dashboard',
@@ -17,13 +19,36 @@ import { BaseChartDirective, provideCharts, withDefaultRegisterables } from 'ng2
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
 })
+  
 export class DashboardComponent implements OnInit {
   tasks$!: Observable<Task[]>;
   loading$!: Observable<boolean>;
   error$!: Observable<string | null>;
+  totalTasks$!: Observable<number>;
+  completedTasks$!: Observable<number>;
+  overdueTasks$!: Observable<number>;
+  activities$!: Observable<Activity[]>;
 
-  statusChartData!: ChartConfiguration['data'];
-  priorityChartData!: ChartConfiguration['data'];
+  statusChartData: ChartConfiguration['data'] = {
+    labels: ['To Do', 'In Progress', 'In Review', 'Completed'],
+    datasets: [
+      {
+        data: [0, 0, 0, 0],
+        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0'],
+      },
+    ],
+  };
+
+  priorityChartData: ChartConfiguration['data'] = {
+    labels: ['Low', 'Medium', 'High', 'Critical'],
+    datasets: [
+      {
+        data: [0, 0, 0, 0],
+        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#FF9F40'],
+      },
+    ],
+  };
+
   statusChartType: ChartConfiguration['type'] = 'pie';
   priorityChartType: ChartConfiguration['type'] = 'pie';
   chartOptions: ChartConfiguration['options'] = {
@@ -41,13 +66,20 @@ export class DashboardComponent implements OnInit {
     this.tasks$ = this.store.select(selectAllTasks);
     this.loading$ = this.store.select(selectTasksLoading);
     this.error$ = this.store.select(selectTasksError);
+    this.totalTasks$ = this.store.select(selectTotalTasks);
+    this.completedTasks$ = this.store.select(selectCompletedTasks);
+    this.overdueTasks$ = this.store.select(selectOverdueTasks);
+    this.activities$ = this.store.select(selectActivities);
+
+    // Ensure tasks are loaded
+    this.store.dispatch(TaskActions.loadTasks());
 
     this.tasks$.subscribe((tasks) => {
       const statusCounts: StatusCounts = {
         'To Do': 0,
         'In Progress': 0,
         'In Review': 0,
-        Completed: 0,
+        'Completed': 0,
       };
 
       tasks.forEach((task) => {

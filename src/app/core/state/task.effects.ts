@@ -4,11 +4,13 @@ import { TaskMockService } from '../services/task-mock.service';
 import { TaskActions } from './task.actions';
 import { catchError, map, mergeMap, of } from 'rxjs';
 import { Task } from '../models/task';
+import { ActivityActions } from './activity.actions';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class TaskEffects {
-  private readonly actions$ = inject(Actions);
-  private readonly taskService = inject(TaskMockService);
+  private actions$ = inject(Actions);
+  private taskService = inject(TaskMockService);
 
   loadTasks$ = createEffect(() =>
     this.actions$.pipe(
@@ -87,6 +89,48 @@ export class TaskEffects {
           )
         )
       )
+    )
+  );
+
+  logAddActivity$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(TaskActions.addTaskSuccess),
+      map(({ task }) => {
+        const activity = {
+          id: uuidv4(),
+          message: `Task "${task.title}" created`,
+          timestamp: new Date().toISOString(),
+        };
+        return ActivityActions.logActivity({ activity });
+      })
+    )
+  );
+
+  logUpdateActivity$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(TaskActions.updateTaskSuccess),
+      map(({ task }) => {
+        const activity = {
+          id: uuidv4(),
+          message: `Task "${task.title}" updated`,
+          timestamp: new Date().toISOString(),
+        };
+        return ActivityActions.logActivity({ activity });
+      })
+    )
+  );
+
+  logDeleteActivity$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(TaskActions.deleteTask),
+      map(({ id }) => {
+        const activity = {
+          id: uuidv4(),
+          message: `Task with ID "${id}" deleted`,
+          timestamp: new Date().toISOString(),
+        };
+        return ActivityActions.logActivity({ activity });
+      })
     )
   );
 }

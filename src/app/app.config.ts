@@ -13,13 +13,14 @@ import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { TaskEffects } from './core/state/task.effects';
 import { taskReducer } from './core/state/task.reducer';
 import { MatNativeDateModule } from '@angular/material/core';
+import { activityReducer } from './core/state/activity.reducer';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideAnimationsAsync(),
-    provideStore({ tasks: taskReducer }),
+    provideStore({ tasks: taskReducer, activity: activityReducer }),
     importProvidersFrom(EffectsModule.forRoot([TaskEffects])),
     provideStoreDevtools({ maxAge: 25, logOnly: false }),
     provideCharts(withDefaultRegisterables()),

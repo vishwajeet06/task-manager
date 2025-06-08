@@ -47,20 +47,33 @@ export class TaskMockService {
   ];
 
   getTasks(): Observable<Task[]> {
-    return of(this.tasks);
+    // Return a deep copy of the tasks array
+    return of(
+      this.tasks.map((task) => ({
+        ...task,
+        attachments: [...task.attachments],
+      }))
+    );
   }
 
   addTask(task: Omit<Task, 'id'>): Observable<Task> {
     const newTask: Task = { ...task, id: uuidv4() };
-    this.tasks.push(newTask);
+    // Create a new array with the new task instead of mutating the existing one
+    this.tasks = [...this.tasks, newTask];
     return of(newTask);
   }
 
   updateTask(id: string, task: Omit<Task, 'id'>): Observable<Task> {
     const index = this.tasks.findIndex((t) => t.id === id);
     if (index !== -1) {
-      this.tasks[index] = { ...task, id };
-      return of(this.tasks[index]);
+      // Create a new array with the updated task
+      const updatedTask = { ...this.tasks[index], ...task };
+      this.tasks = [
+        ...this.tasks.slice(0, index),
+        updatedTask,
+        ...this.tasks.slice(index + 1),
+      ];
+      return of(updatedTask);
     }
     throw new Error('Task not found');
   }
