@@ -1,6 +1,15 @@
 .actions {
   margin-bottom: 20px;
 }
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.filters mat-form-field {
+  flex: 1 1 200px;
+}
 table {
   width: 100%;
 }
