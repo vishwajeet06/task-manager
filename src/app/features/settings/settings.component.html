@@ -1,53 +1,72 @@
-<h1>Settings</h1>
-<div *ngIf="userData$ | async as userData">
-  <h2>User Profile</h2>
-  <form #profileForm="ngForm">
-    <mat-form-field appearance="fill">
-      <mat-label>Name</mat-label>
-      <input matInput [(ngModel)]="profile.name" name="name" required />
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Email</mat-label>
-      <input
-        matInput
-        [(ngModel)]="profile.email"
-        name="email"
-        type="email"
-        required
-      />
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Role</mat-label>
-      <input matInput [(ngModel)]="profile.role" name="role" required />
-    </mat-form-field>
-  </form>
+<h1 class="page-title">Settings</h1>
 
-  <h2>Account Settings</h2>
-  <form #settingsForm="ngForm">
-    <mat-slide-toggle
-      [(ngModel)]="settings.notificationsEnabled"
-      name="notificationsEnabled"
-    >
-      Email Notifications
-    </mat-slide-toggle>
-    <mat-form-field appearance="fill">
-      <mat-label>Timezone</mat-label>
-      <mat-select [(ngModel)]="settings.timezone" name="timezone" required>
-        <mat-option value="UTC">UTC</mat-option>
-        <mat-option value="America/New_York">America/New_York</mat-option>
-        <mat-option value="Asia/Kolkata">Asia/Kolkata</mat-option>
-      </mat-select>
-    </mat-form-field>
-  </form>
+<div *ngIf="userData$ | async as userData" class="settings-container">
+  <mat-card class="settings-section">
+    <mat-card-header>
+      <mat-card-title>User Profile</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form #profileForm="ngForm" class="settings-form">
+        <mat-form-field appearance="outline">
+          <mat-label>Name</mat-label>
+          <input matInput [(ngModel)]="profile.name" name="name" required />
+        </mat-form-field>
 
-  <div style="margin-top: 20px">
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input
+            matInput
+            [(ngModel)]="profile.email"
+            name="email"
+            type="email"
+            required
+          />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Role</mat-label>
+          <input matInput [(ngModel)]="profile.role" name="role" required />
+        </mat-form-field>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="settings-section">
+    <mat-card-header>
+      <mat-card-title>Account Settings</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form #settingsForm="ngForm" class="settings-form">
+        <div class="toggle-container">
+          <mat-slide-toggle
+            [(ngModel)]="settings.notificationsEnabled"
+            name="notificationsEnabled"
+            color="primary"
+          >
+            Email Notifications
+          </mat-slide-toggle>
+        </div>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Timezone</mat-label>
+          <mat-select [(ngModel)]="settings.timezone" name="timezone" required>
+            <mat-option value="UTC">UTC</mat-option>
+            <mat-option value="America/New_York">America/New_York</mat-option>
+            <mat-option value="Asia/Kolkata">Asia/Kolkata</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <div class="actions-container">
     <button
       mat-raised-button
       color="primary"
       (click)="saveSettings()"
       [disabled]="!profileForm.valid || !settingsForm.valid"
     >
-      Save
+      Save Changes
     </button>
   </div>
 </div>

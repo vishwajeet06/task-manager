@@ -1,9 +1,88 @@
-h2 {
-  margin-top: 20px;
+
+@use '@angular/material' as mat;
+@include mat.core();
+
+.settings-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 16px;
 }
-mat-form-field,
-mat-slide-toggle {
-  display: block;
-  margin-bottom: 15px;
-  width: 100%;
+
+.page-title {
+  text-align: center;
+  margin: 24px 0;
+  font-weight: 500;
+  color: #303f9f;
+}
+
+.settings-section {
+  margin-bottom: 24px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  
+  mat-card-header {
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    
+    mat-card-title {
+      font-size: 1.25rem;
+      font-weight: 500;
+    }
+  }
+  
+  mat-card-content {
+    padding-top: 16px;
+  }
+}
+
+.settings-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  
+  mat-form-field {
+    width: 100%;
+    
+    .mdc-notched-outline__leading,
+    .mdc-notched-outline__notch,
+    .mdc-notched-outline__trailing {
+      border-color: rgba(0, 0, 0, 0.12);
+    }
+    
+    &:hover .mdc-notched-outline__leading,
+    &:hover .mdc-notched-outline__notch,
+    &:hover .mdc-notched-outline__trailing {
+      border-color: rgba(0, 0, 0, 0.24);
+    }
+  }
+}
+
+.toggle-container {
+  padding: 8px 0;
+  
+  mat-slide-toggle {
+    margin: 0;
+  }
+}
+
+.actions-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 24px;
+  
+  button {
+    padding: 0 24px;
+    height: 42px;
+    font-weight: 500;
+  }
+}
+
+@media (max-width: 600px) {
+  .settings-container {
+    padding: 8px;
+  }
+  
+  .settings-section {
+    margin-bottom: 16px;
+  }
 }

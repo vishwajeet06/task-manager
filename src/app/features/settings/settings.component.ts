@@ -1,3 +1,4 @@
+import { MatCardModule } from '@angular/material/card';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -25,6 +26,7 @@ import { CommonModule } from '@angular/common';
     MatButtonModule,
     FormsModule,
     CommonModule,
+    MatCardModule
   ],
   templateUrl: './settings.component.html',
   styleUrl: './settings.component.scss',
