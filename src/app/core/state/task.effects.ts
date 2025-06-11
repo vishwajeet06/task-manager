@@ -6,11 +6,18 @@ import { catchError, map, mergeMap, of } from 'rxjs';
 import { Task } from '../models/task';
 import { ActivityActions } from './activity.actions';
 import { v4 as uuidv4 } from 'uuid';
+import { TaskService } from '../services/task.service';
 
 @Injectable()
 export class TaskEffects {
   private actions$ = inject(Actions);
-  private taskService = inject(TaskMockService);
+  private taskService = inject(TaskService);
+  // private taskService = inject(TaskMockService);
+
+  // constructor(
+  //   private actions$: Actions,
+  //   private taskService: TaskService // Updated service
+  // ) {}
 
   loadTasks$ = createEffect(() =>
     this.actions$.pipe(

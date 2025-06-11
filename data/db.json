@@ -1,0 +1,121 @@
+{
+  "tasks": [
+    {
+      "id": "1",
+      "title": "Design Homepage",
+      "description": "Create wireframes and mockups for the homepage.",
+      "priority": "High",
+      "dueDate": "2025-06-10",
+      "status": "To Do",
+      "category": "",
+      "tags": [
+        "design",
+        "ui"
+      ],
+      "assignedTo": "Alice",
+      "attachments": [],
+      "comments": [
+        {
+          "id": "c1",
+          "content": "Let’s discuss the color scheme tomorrow.",
+          "author": "Bob",
+          "timestamp": "2025-06-08T10:00:00Z"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "title": "Implement Login API",
+      "description": "Develop the login API with JWT authentication.",
+      "priority": "Medium",
+      "dueDate": "2025-06-15",
+      "status": "In Progress",
+      "category": "",
+      "tags": [
+        "api",
+        "backend"
+      ],
+      "assignedTo": "Charlie",
+      "attachments": [
+        {
+          "name": "api-spec.pdf",
+          "size": 2048
+        }
+      ],
+      "comments": []
+    },
+    {
+      "id": "3",
+      "title": "Test Payment Gateway",
+      "description": "Run tests on the payment gateway integration.",
+      "priority": "High",
+      "dueDate": "2025-06-20",
+      "status": "Completed",
+      "category": "",
+      "tags": [
+        "testing",
+        "payment"
+      ],
+      "assignedTo": "Dave",
+      "attachments": [],
+      "comments": []
+    },
+    {
+      "id": "4",
+      "title": "Review UI Designs",
+      "description": "Review the UI designs for the dashboard.",
+      "priority": "Critical",
+      "dueDate": "2025-06-05",
+      "status": "In Review",
+      "category": "Design",
+      "tags": [
+        "ui",
+        "review"
+      ],
+      "assignedTo": "Bob Johnson",
+      "attachments": [],
+      "comments": []
+    },
+    {
+      "id": "5",
+      "title": "Fix Bugs in Checkout",
+      "description": "Resolve bugs reported in the checkout process.",
+      "priority": "Low",
+      "dueDate": "2025-06-12",
+      "status": "In Progress",
+      "category": "Development",
+      "tags": [
+        "bug",
+        "checkout"
+      ],
+      "assignedTo": "Frank",
+      "attachments": [],
+      "comments": []
+    },
+    {
+      "id": "6",
+      "title": "Plan Sprint 3",
+      "description": "Plan tasks and goals for Sprint 3.",
+      "priority": "Medium",
+      "dueDate": "2025-06-09",
+      "status": "To Do",
+      "category": "Planning",
+      "tags": [
+        "sprint",
+        "planning"
+      ],
+      "assignedTo": "Grace",
+      "attachments": [],
+      "comments": []
+    }
+  ],
+  "activities": [
+    {
+      "id": "a1",
+      "taskId": "1",
+      "action": "Comment Added",
+      "details": "Bob added a comment: Let’s discuss the color scheme tomorrow.",
+      "timestamp": "2025-06-08T10:00:00Z"
+    }
+  ]
+}

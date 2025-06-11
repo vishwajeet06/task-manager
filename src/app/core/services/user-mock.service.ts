@@ -27,8 +27,8 @@ export interface TeamMember {
 export class UserMockService {
   private userData: UserData = {
     profile: {
-      name: 'John Doe',
-      email: 'john.doe@example.com',
+      name: 'vishwajeet Kumar',
+      email: 'vishwajeet.kumar@example.com',
       role: 'Developer',
     },
     settings: {
@@ -38,10 +38,10 @@ export class UserMockService {
   };
 
   private teamMembers: TeamMember[] = [
-    { name: 'John Doe' },
-    { name: 'Jane Doe' },
-    { name: 'Alice Smith' },
-    { name: 'Bob Johnson' },
+    { name: 'Vishwajeet' },
+    { name: 'Prateek' },
+    { name: 'Sanjeev' },
+    { name: 'Satis' },
   ];
 
   getUserData(): Observable<UserData> {

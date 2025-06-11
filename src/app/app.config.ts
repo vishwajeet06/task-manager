@@ -14,11 +14,13 @@ import { TaskEffects } from './core/state/task.effects';
 import { taskReducer } from './core/state/task.reducer';
 import { MatNativeDateModule } from '@angular/material/core';
 import { activityReducer } from './core/state/activity.reducer';
+import { provideHttpClient } from '@angular/common/http';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
+    provideHttpClient(),
     provideAnimationsAsync(),
     provideStore({ tasks: taskReducer, activity: activityReducer }),
     importProvidersFrom(EffectsModule.forRoot([TaskEffects])),
