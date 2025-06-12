@@ -1,5 +1,7 @@
 export interface Activity {
   id: string;
-  message: string;
+  taskId: string;
+  action: string;
+  details: string;
   timestamp: string;
 }

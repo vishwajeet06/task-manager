@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Task } from '../../../core/models/task';
-import { TaskActions } from '../../../core/state/task.actions';
+// import { TaskActions } from '../../../core/state/task.actions';
 import {
   selectAllTasks,
   selectTasksLoading,
@@ -29,6 +29,7 @@ import { CommonModule } from '@angular/common';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatSelectModule } from '@angular/material/select';
 import { ActivatedRoute, Router } from '@angular/router';
+import { addTask, deleteTask, loadTasks, updateTask } from '../../../core/state/task.actions';
 
 @Component({
   selector: 'app-task-list',
@@ -91,7 +92,7 @@ export class TaskListComponent implements OnInit, OnDestroy {
     this.tasks$ = this.store.select(selectAllTasks);
     this.loading$ = this.store.select(selectTasksLoading);
     this.error$ = this.store.select(selectTasksError);
-    this.store.dispatch(TaskActions.loadTasks());
+    this.store.dispatch(loadTasks());
 
     // Read initial filter values from query params
     this.route.queryParams
@@ -237,7 +238,7 @@ export class TaskListComponent implements OnInit, OnDestroy {
       .subscribe((result: Omit<Task, 'id'> | undefined) => {
         if (result) {
           this.store.dispatch(
-            TaskActions.addTask({ task: result as Omit<Task, 'id'> })
+            addTask({ task: result as Omit<Task, 'id'> })
           );
         }
       });
@@ -254,7 +255,7 @@ export class TaskListComponent implements OnInit, OnDestroy {
       .subscribe((result: Omit<Task, 'id'> | undefined) => {
         if (result) {
           this.store.dispatch(
-            TaskActions.updateTask({
+            updateTask({
               id: task.id,
               task: result as Omit<Task, 'id'>,
             })
@@ -265,7 +266,7 @@ export class TaskListComponent implements OnInit, OnDestroy {
 
   deleteTask(id: string) {
     if (confirm('Are you sure you want to delete this task?')) {
-      this.store.dispatch(TaskActions.deleteTask({ id }));
+      this.store.dispatch(deleteTask({ id }));
     }
   }
 }

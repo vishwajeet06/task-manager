@@ -15,6 +15,7 @@ import { taskReducer } from './core/state/task.reducer';
 import { MatNativeDateModule } from '@angular/material/core';
 import { activityReducer } from './core/state/activity.reducer';
 import { provideHttpClient } from '@angular/common/http';
+import { ActivityEffects } from './core/state/activity.effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -23,7 +24,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(),
     provideAnimationsAsync(),
     provideStore({ tasks: taskReducer, activity: activityReducer }),
-    importProvidersFrom(EffectsModule.forRoot([TaskEffects])),
+    importProvidersFrom(EffectsModule.forRoot([TaskEffects, ActivityEffects])),
     provideStoreDevtools({ maxAge: 25, logOnly: false }),
     provideCharts(withDefaultRegisterables()),
     importProvidersFrom(MatNativeDateModule),

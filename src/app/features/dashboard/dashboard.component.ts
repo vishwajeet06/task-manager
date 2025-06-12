@@ -4,22 +4,35 @@ import { Store } from '@ngrx/store';
 import Chart, { ChartConfiguration } from 'chart.js/auto';
 import { Observable } from 'rxjs';
 import { PriorityCounts, StatusCounts, Task } from '../../core/models/task';
-import { TaskActions } from '../../core/state/task.actions';
-import { selectAllTasks, selectTasksLoading, selectTasksError, selectTotalTasks, selectCompletedTasks, selectOverdueTasks } from '../../core/state/task.selectors';
+// import { TaskActions } from '../../core/state/task.actions';
+import {
+  selectAllTasks,
+  selectTasksLoading,
+  selectTasksError,
+  selectTotalTasks,
+  selectCompletedTasks,
+  selectOverdueTasks,
+} from '../../core/state/task.selectors';
 import { CommonModule } from '@angular/common';
-import { BaseChartDirective, provideCharts, withDefaultRegisterables } from 'ng2-charts';
+import {
+  BaseChartDirective,
+  provideCharts,
+  withDefaultRegisterables,
+} from 'ng2-charts';
 import { Activity } from '../../core/models/activity';
 import { selectActivities } from '../../core/state/activity.selectors';
+import { loadTasks } from '../../core/state/task.actions';
+import { MatIconModule } from '@angular/material/icon';
+import { loadActivities } from '../../core/state/activity.actions';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, BaseChartDirective],
+  imports: [CommonModule, BaseChartDirective, MatIconModule],
   providers: [provideCharts(withDefaultRegisterables())],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
 })
-  
 export class DashboardComponent implements OnInit {
   tasks$!: Observable<Task[]>;
   loading$!: Observable<boolean>;
@@ -60,6 +73,38 @@ export class DashboardComponent implements OnInit {
     },
   };
 
+  retryLoading(): void {
+    this.store.dispatch(loadActivities());
+  }
+
+  // Determine the icon based on the activity action
+  getIcon(action: string): string {
+    switch (action) {
+      case 'Task Created':
+        return 'add_circle';
+      case 'Task Updated':
+        return 'edit';
+      case 'Task Deleted':
+        return 'delete';
+      default:
+        return 'info';
+    }
+  }
+
+  // Determine the icon class for styling based on the activity action
+  getIconClass(action: string): string {
+    switch (action) {
+      case 'Task Created':
+        return 'icon-created';
+      case 'Task Updated':
+        return 'icon-updated';
+      case 'Task Deleted':
+        return 'icon-deleted';
+      default:
+        return 'icon-default';
+    }
+  }
+
   constructor(private store: Store) {}
 
   ngOnInit() {
@@ -72,14 +117,15 @@ export class DashboardComponent implements OnInit {
     this.activities$ = this.store.select(selectActivities);
 
     // Ensure tasks are loaded
-    this.store.dispatch(TaskActions.loadTasks());
+    this.store.dispatch(loadTasks());
+    this.store.dispatch(loadActivities());
 
     this.tasks$.subscribe((tasks) => {
       const statusCounts: StatusCounts = {
         'To Do': 0,
         'In Progress': 0,
         'In Review': 0,
-        'Completed': 0,
+        Completed: 0,
       };
 
       tasks.forEach((task) => {

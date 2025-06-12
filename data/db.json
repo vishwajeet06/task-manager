@@ -3,16 +3,16 @@
     {
       "id": "1",
       "title": "Design Homepage",
-      "description": "Create wireframes and mockups for the homepage.",
-      "priority": "High",
+      "description": "<p>Create&nbsp;wire-<strong>frames&nbsp;</strong>and&nbsp;<strong>mockups&nbsp;</strong>for&nbsp;the&nbsp;homepage.</p>",
+      "priority": "Critical",
       "dueDate": "2025-06-10",
       "status": "To Do",
-      "category": "",
+      "category": "Design",
       "tags": [
         "design",
         "ui"
       ],
-      "assignedTo": "Alice",
+      "assignedTo": "Vishwajeet",
       "attachments": [],
       "comments": [
         {
@@ -93,20 +93,19 @@
       "comments": []
     },
     {
-      "id": "6",
-      "title": "Plan Sprint 3",
-      "description": "Plan tasks and goals for Sprint 3.",
-      "priority": "Medium",
-      "dueDate": "2025-06-09",
-      "status": "To Do",
-      "category": "Planning",
+      "id": "3171",
+      "title": "Feature implementation",
+      "description": "<p><strong>Theme&nbsp;implementation</strong></p>",
+      "priority": "Low",
+      "dueDate": "2025-06-02",
+      "status": "Completed",
+      "category": "Design",
       "tags": [
-        "sprint",
-        "planning"
+        "UI",
+        "Design"
       ],
-      "assignedTo": "Grace",
-      "attachments": [],
-      "comments": []
+      "assignedTo": "Vishwajeet",
+      "attachments": []
     }
   ],
   "activities": [
@@ -116,6 +115,34 @@
       "action": "Comment Added",
       "details": "Bob added a comment: Let’s discuss the color scheme tomorrow.",
       "timestamp": "2025-06-08T10:00:00Z"
+    },
+    {
+      "id": "8731",
+      "taskId": "1",
+      "action": "Task Updated",
+      "details": "Task \"Design Homepage\" was updated.",
+      "timestamp": "2025-06-12T07:16:54.840Z"
+    },
+    {
+      "id": "3dc7",
+      "taskId": "1",
+      "action": "Task Updated",
+      "details": "Task \"Design Homepage\" was updated.",
+      "timestamp": "2025-06-12T08:30:32.479Z"
+    },
+    {
+      "id": "a63e",
+      "taskId": "6",
+      "action": "Task Deleted",
+      "details": "Task with ID 6 was deleted.",
+      "timestamp": "2025-06-12T11:20:33.238Z"
+    },
+    {
+      "id": "19d0",
+      "taskId": "3171",
+      "action": "Task Updated",
+      "details": "Task \"Feature implementation\" was updated.",
+      "timestamp": "2025-06-12T11:37:13.633Z"
     }
   ]
 }

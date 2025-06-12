@@ -1,7 +1,15 @@
 import { createReducer, on } from '@ngrx/store';
 import { Task } from '../models/task';
-import { TaskActions } from './task.actions';
+// import { TaskActions } from './task.actions';
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
+import {
+  addTaskSuccess,
+  deleteTaskSuccess,
+  loadTasks,
+  loadTasksFailure,
+  loadTasksSuccess,
+  updateTaskSuccess,
+} from './task.actions';
 
 export interface TaskState extends EntityState<Task> {
   loading: boolean;
@@ -19,32 +27,32 @@ export const initialTaskState: TaskState = taskAdapter.getInitialState({
 
 export const taskReducer = createReducer(
   initialTaskState,
-  on(TaskActions.loadTasks, (state) => ({
+  on(loadTasks, (state) => ({
     ...state,
     loading: true,
     error: null,
   })),
-  on(TaskActions.loadTasksSuccess, (state, { tasks }) =>
+  on(loadTasksSuccess, (state, { tasks }) =>
     taskAdapter.setAll(tasks, {
       ...state,
       loading: false,
       error: null,
     })
   ),
-  on(TaskActions.loadTasksFailure, (state, { error }) => ({
+  on(loadTasksFailure, (state, { error }) => ({
     ...state,
     loading: false,
     error,
   })),
-  on(TaskActions.addTaskSuccess, (state, { task }) =>
+  on(addTaskSuccess, (state, { task }) =>
     taskAdapter.addOne(task, {
       ...state,
     })
   ),
-  on(TaskActions.updateTaskSuccess, (state, { id, task }) =>
+  on(updateTaskSuccess, (state, { id, task }) =>
     taskAdapter.updateOne({ id, changes: task }, { ...state })
   ),
-  on(TaskActions.deleteTaskSuccess, (state, { id }) =>
+  on(deleteTaskSuccess, (state, { id }) =>
     taskAdapter.removeOne(id, {
       ...state,
     })

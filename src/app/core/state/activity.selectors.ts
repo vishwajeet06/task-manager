@@ -8,3 +8,8 @@ export const selectActivities = createSelector(
   selectActivityState,
   (state: ActivityState) => state.activities
 );
+
+export const selectActivityError = createSelector(
+  selectActivityState,
+  (state: ActivityState) => state.error
+);
