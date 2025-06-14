@@ -1,17 +1,20 @@
-<div class="settings-container">
-  <h2>Settings</h2>
-  <form [formGroup]="settingsForm" (ngSubmit)="onSubmit()">
+<div class="login-container">
+  <h2>Login</h2>
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
     <mat-form-field appearance="fill">
-      <mat-label>Username</mat-label>
+      <mat-label>Email</mat-label>
       <input
         matInput
-        id="userName"
-        type="text"
-        formControlName="userName"
+        id="email"
+        type="email"
+        formControlName="email"
         required
       />
-      <mat-error *ngIf="settingsForm.get('userName')?.hasError('required')">
-        Username is required
+      <mat-error *ngIf="loginForm.get('email')?.hasError('required')">
+        Email is required
+      </mat-error>
+      <mat-error *ngIf="loginForm.get('email')?.hasError('email')">
+        Invalid email format
       </mat-error>
     </mat-form-field>
 
@@ -24,7 +27,7 @@
         formControlName="password"
         required
       />
-      <mat-error *ngIf="settingsForm.get('password')?.hasError('required')">
+      <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
         Password is required
       </mat-error>
     </mat-form-field>
@@ -32,17 +35,15 @@
     <div *ngIf="errorMessage" class="error-message">
       {{ errorMessage }}
     </div>
-    <div *ngIf="successMessage" class="success-message">
-      {{ successMessage }}
-    </div>
 
     <button
       mat-raised-button
       color="primary"
       type="submit"
-      [disabled]="settingsForm.invalid"
+      [disabled]="loginForm.invalid"
     >
-      Update Details
+      Login
     </button>
   </form>
+  <p>Don't have an account? <a routerLink="/register">Register here</a></p>
 </div>

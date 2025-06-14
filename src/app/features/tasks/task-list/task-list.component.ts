@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Task } from '../../../core/models/task';
-// import { TaskActions } from '../../../core/state/task.actions';
 import {
   selectAllTasks,
   selectTasksLoading,
@@ -29,7 +28,13 @@ import { CommonModule } from '@angular/common';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatSelectModule } from '@angular/material/select';
 import { ActivatedRoute, Router } from '@angular/router';
-import { addTask, deleteTask, loadTasks, updateTask } from '../../../core/state/task.actions';
+import {
+  addTask,
+  deleteTask,
+  loadTasks,
+  updateTask,
+} from '../../../core/state/task.actions';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-task-list',
@@ -51,6 +56,7 @@ import { addTask, deleteTask, loadTasks, updateTask } from '../../../core/state/
 })
 export class TaskListComponent implements OnInit, OnDestroy {
   tasks$!: Observable<Task[]>;
+  isAdmin$!: Observable<boolean>;
   loading$!: Observable<boolean>;
   error$!: Observable<string | null>;
   dataSource = new MatTableDataSource<Task>();
@@ -85,11 +91,13 @@ export class TaskListComponent implements OnInit, OnDestroy {
     private store: Store,
     private dialog: MatDialog,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
     this.tasks$ = this.store.select(selectAllTasks);
+    this.isAdmin$ = this.authService.isAdmin();
     this.loading$ = this.store.select(selectTasksLoading);
     this.error$ = this.store.select(selectTasksError);
     this.store.dispatch(loadTasks());
@@ -237,9 +245,7 @@ export class TaskListComponent implements OnInit, OnDestroy {
       .afterClosed()
       .subscribe((result: Omit<Task, 'id'> | undefined) => {
         if (result) {
-          this.store.dispatch(
-            addTask({ task: result as Omit<Task, 'id'> })
-          );
+          this.store.dispatch(addTask({ task: result as Omit<Task, 'id'> }));
         }
       });
   }

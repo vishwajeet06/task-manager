@@ -1,31 +1,86 @@
 // src/app/services/task.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, catchError, map, of, switchMap } from 'rxjs';
 import { Task } from '../models/task';
 import { Activity } from '../models/activity';
+import { AuthService } from './auth.service';
 
 @Injectable({ providedIn: 'root' })
 export class TaskService {
   private taskApiUrl = 'http://localhost:3000/tasks';
   private activityApiUrl = 'http://localhost:3000/activities';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
+
+  private checkAdminAccess(): Observable<boolean> {
+    return this.authService.isAdmin();
+  }
 
   getTasks(): Observable<Task[]> {
-    return this.http.get<Task[]>(this.taskApiUrl);
+    return this.http
+      .get<Task[]>(this.taskApiUrl)
+      .pipe(catchError(() => of([])));
   }
 
-  addTask(task: Omit<Task, 'id'>): Observable<Task> {
-    return this.http.post<Task>(this.taskApiUrl, task);
+  // addTask(task: Omit<Task, 'id'>): Observable<Task> {
+  //   return this.http.post<Task>(this.taskApiUrl, task);
+  // }
+
+  addTask(task: any): Observable<any> {
+    return this.checkAdminAccess().pipe(
+      switchMap((isAdmin) => {
+        if (!isAdmin) {
+          throw new Error('Only admins can add tasks');
+        }
+        return this.http.post<any>(this.taskApiUrl, task);
+      }),
+      catchError((error) => {
+        console.error(error.message);
+        return of(null);
+      })
+    );
   }
 
-  updateTask(id: string, task: Partial<Task>): Observable<Task> {
-    return this.http.patch<Task>(`${this.taskApiUrl}/${id}`, task);
+  // updateTask(id: string, task: Partial<Task>): Observable<Task> {
+  //   return this.http.patch<Task>(`${this.taskApiUrl}/${id}`, task);
+  // }
+
+  updateTask(id: string, task: Partial<Task>): Observable<any> {
+    return this.checkAdminAccess().pipe(
+      switchMap((isAdmin) => {
+        if (!isAdmin) {
+          throw new Error('Only admins can update tasks');
+        }
+        return this.http.put<any>(`${this.taskApiUrl}/${id}`, task);
+      }),
+      catchError((error) => {
+        console.error(error.message);
+        return of(null);
+      })
+    );
   }
 
-  deleteTask(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.taskApiUrl}/${id}`);
+  // deleteTask(id: string): Observable<void> {
+  //   return this.http.delete<void>(`${this.taskApiUrl}/${id}`);
+  // }
+
+  deleteTask(id: string): Observable<boolean> {
+    return this.checkAdminAccess().pipe(
+      switchMap((isAdmin) => {
+        if (!isAdmin) {
+          throw new Error('Only admins can delete tasks');
+        }
+        return this.http.delete(`${this.taskApiUrl}/${id}`).pipe(
+          map(() => true),
+          catchError(() => of(false))
+        );
+      }),
+      catchError((error) => {
+        console.error(error.message);
+        return of(false);
+      })
+    );
   }
 
   logActivity(

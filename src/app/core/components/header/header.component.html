@@ -1,0 +1,14 @@
+<mat-toolbar color="primary">
+  <span>Task Manager</span>
+  <span class="spacer"></span>
+  <ng-container *ngIf="isLoggedIn$ | async; else notLoggedIn">
+    <button mat-button routerLink="/tasks">Tasks</button>
+    <button mat-button routerLink="/dashboard">Dashboard</button>
+    <button mat-button routerLink="/settings">Settings</button>
+    <span class="user-name">{{ userName }}</span>
+    <button mat-button (click)="logout()">Logout</button>
+  </ng-container>
+  <ng-template #notLoggedIn>
+    <button mat-button routerLink="/login">Login</button>
+  </ng-template>
+</mat-toolbar>

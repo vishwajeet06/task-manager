@@ -3,15 +3,12 @@
     {
       "id": "1",
       "title": "Design Homepage",
-      "description": "<p>Create&nbsp;wire-<strong>frames&nbsp;</strong>and&nbsp;<strong>mockups&nbsp;</strong>for&nbsp;the&nbsp;homepage.</p>",
+      "description": "<p>Create&nbsp;<em>wire</em>-<strong>frames&nbsp;</strong>and&nbsp;<strong>mockups&nbsp;</strong>for&nbsp;the&nbsp;homepage.</p>",
       "priority": "Critical",
       "dueDate": "2025-06-10",
       "status": "To Do",
       "category": "Design",
-      "tags": [
-        "design",
-        "ui"
-      ],
+      "tags": ["design", "ui"],
       "assignedTo": "Vishwajeet",
       "attachments": [],
       "comments": [
@@ -31,11 +28,8 @@
       "dueDate": "2025-06-15",
       "status": "In Progress",
       "category": "",
-      "tags": [
-        "api",
-        "backend"
-      ],
-      "assignedTo": "Charlie",
+      "tags": ["api", "backend"],
+      "assignedTo": "Sanjeev",
       "attachments": [
         {
           "name": "api-spec.pdf",
@@ -52,11 +46,8 @@
       "dueDate": "2025-06-20",
       "status": "Completed",
       "category": "",
-      "tags": [
-        "testing",
-        "payment"
-      ],
-      "assignedTo": "Dave",
+      "tags": ["testing", "payment"],
+      "assignedTo": "Prateek",
       "attachments": [],
       "comments": []
     },
@@ -68,11 +59,8 @@
       "dueDate": "2025-06-05",
       "status": "In Review",
       "category": "Design",
-      "tags": [
-        "ui",
-        "review"
-      ],
-      "assignedTo": "Bob Johnson",
+      "tags": ["ui", "review"],
+      "assignedTo": "Satis",
       "attachments": [],
       "comments": []
     },
@@ -84,11 +72,8 @@
       "dueDate": "2025-06-12",
       "status": "In Progress",
       "category": "Development",
-      "tags": [
-        "bug",
-        "checkout"
-      ],
-      "assignedTo": "Frank",
+      "tags": ["bug", "checkout"],
+      "assignedTo": "Satis",
       "attachments": [],
       "comments": []
     },
@@ -100,10 +85,7 @@
       "dueDate": "2025-06-02",
       "status": "Completed",
       "category": "Design",
-      "tags": [
-        "UI",
-        "Design"
-      ],
+      "tags": ["UI", "Design"],
       "assignedTo": "Vishwajeet",
       "attachments": []
     }
@@ -143,6 +125,43 @@
       "action": "Task Updated",
       "details": "Task \"Feature implementation\" was updated.",
       "timestamp": "2025-06-12T11:37:13.633Z"
+    },
+    {
+      "id": "2639",
+      "taskId": "1",
+      "action": "Task Updated",
+      "details": "Task \"Design Homepage\" was updated.",
+      "timestamp": "2025-06-14T19:14:03.564Z"
+    }
+  ],
+  "users": [
+    {
+      "id": "1",
+      "email": "vishwa@example.com",
+      "password": "vishwa",
+      "role": "admin",
+      "userName": "Vishwajeet"
+    },
+    {
+      "id": "221c",
+      "email": "newadmin@example.com",
+      "password": "newadmin123",
+      "role": "admin",
+      "userName": "NewAdmin"
+    },
+    {
+      "id": "6789",
+      "email": "vishwa@gmail.com",
+      "password": "123",
+      "role": "admin",
+      "userName": "Vishwajeet kumar"
+    },
+    {
+      "id": "6790",
+      "email": "user@user.com",
+      "password": "user",
+      "role": "user",
+      "userName": "user"
     }
   ]
 }
