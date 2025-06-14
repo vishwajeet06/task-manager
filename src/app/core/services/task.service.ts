@@ -1,17 +1,22 @@
 // src/app/services/task.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, catchError, map, of, switchMap } from 'rxjs';
+import { Observable, catchError, map, of, switchMap, tap } from 'rxjs';
 import { Task } from '../models/task';
 import { Activity } from '../models/activity';
 import { AuthService } from './auth.service';
+import { NotificationService } from './notification.service';
 
 @Injectable({ providedIn: 'root' })
 export class TaskService {
   private taskApiUrl = 'http://localhost:3000/tasks';
   private activityApiUrl = 'http://localhost:3000/activities';
 
-  constructor(private http: HttpClient, private authService: AuthService) {}
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService,
+    private notificationService: NotificationService
+  ) {}
 
   private checkAdminAccess(): Observable<boolean> {
     return this.authService.isAdmin();
@@ -31,11 +36,19 @@ export class TaskService {
     return this.checkAdminAccess().pipe(
       switchMap((isAdmin) => {
         if (!isAdmin) {
+          this.notificationService.error('Only admins can add tasks');
           throw new Error('Only admins can add tasks');
         }
-        return this.http.post<any>(this.taskApiUrl, task);
+        return this.http
+          .post<any>(this.taskApiUrl, task)
+          .pipe(
+            tap(() =>
+              this.notificationService.success('Task added succesfully')
+            )
+          );
       }),
       catchError((error) => {
+        this.notificationService.error('Failed to add task');
         console.error(error.message);
         return of(null);
       })
@@ -50,11 +63,19 @@ export class TaskService {
     return this.checkAdminAccess().pipe(
       switchMap((isAdmin) => {
         if (!isAdmin) {
+          this.notificationService.error('Only admins can update tasks');
           throw new Error('Only admins can update tasks');
         }
-        return this.http.put<any>(`${this.taskApiUrl}/${id}`, task);
+        return this.http
+          .put<any>(`${this.taskApiUrl}/${id}`, task)
+          .pipe(
+            tap(() =>
+              this.notificationService.success('Task updated succesfully')
+            )
+          );
       }),
       catchError((error) => {
+        this.notificationService.error('Failed to update task');
         console.error(error.message);
         return of(null);
       })
@@ -69,14 +90,22 @@ export class TaskService {
     return this.checkAdminAccess().pipe(
       switchMap((isAdmin) => {
         if (!isAdmin) {
+          this.notificationService.error('Only admins can delete tasks');
           throw new Error('Only admins can delete tasks');
         }
         return this.http.delete(`${this.taskApiUrl}/${id}`).pipe(
           map(() => true),
-          catchError(() => of(false))
+          tap(() =>
+            this.notificationService.success('Task deleted successfully')
+          ),
+          catchError(() => {
+            this.notificationService.error('Failed to delete task');
+            return of(false);
+          })
         );
       }),
       catchError((error) => {
+        this.notificationService.error('Failed to delete task');
         console.error(error.message);
         return of(false);
       })
@@ -103,3 +132,5 @@ export class TaskService {
     );
   }
 }
+
+// tap Operator: Used to show success messages after successful operations without altering the observable stream.

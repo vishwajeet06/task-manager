@@ -11,6 +11,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from '../../core/services/auth.service';
+import { NotificationService } from '../../core/services/notification.service';
 
 @Component({
   selector: 'app-register',
@@ -34,7 +35,8 @@ export class RegisterComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private notificationService: NotificationService
   ) {
     this.registerForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -60,14 +62,21 @@ export class RegisterComponent implements OnInit {
     this.authService.register(email, password, userName).subscribe({
       next: (success) => {
         if (success) {
+          this.notificationService.success('Registration successful');
           this.router.navigate(['/tasks']);
         } else {
           this.errorMessage = 'Registration failed. Email may already exist.';
+          this.notificationService.error(
+            'Registration failed. Email may already exist.'
+          );
         }
       },
       error: (error) => {
         this.errorMessage =
           error.message || 'An error occurred during registration';
+        this.notificationService.error(
+          error.message || 'An error occurred during registration'
+        );
       },
     });
   }

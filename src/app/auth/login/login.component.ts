@@ -11,6 +11,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from '../../core/services/auth.service';
+import { NotificationService } from '../../core/services/notification.service';
 
 @Component({
   selector: 'app-login',
@@ -34,7 +35,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private notificationService: NotificationService
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -61,18 +63,22 @@ export class LoginComponent implements OnInit {
         if (success) {
           this.authService.isAdmin().subscribe((isAdmin) => {
             if (isAdmin) {
+              this.notificationService.success('Login successful');
               this.router.navigate(['/tasks']);
             } else {
               this.errorMessage = 'Only admins can access this app';
+              this.notificationService.error('Only admins can access this app');
               this.authService.logout().subscribe();
             }
           });
         } else {
           this.errorMessage = 'Invalid email or password';
+          this.notificationService.error('Invalid email or password');
         }
       },
       error: () => {
         this.errorMessage = 'An error occurred during login';
+        this.notificationService.error('An error occurred during login');
       },
     });
   }

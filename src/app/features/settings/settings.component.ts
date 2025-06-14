@@ -13,6 +13,7 @@ import { HttpClient } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { AuthService } from '../../core/services/auth.service';
+import { NotificationService } from '../../core/services/notification.service';
 
 @Component({
   selector: 'app-settings',
@@ -37,7 +38,8 @@ export class SettingsComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private http: HttpClient
+    private http: HttpClient,
+    private notificationService: NotificationService
   ) {
     this.settingsForm = this.fb.group({
       userName: ['', Validators.required],
@@ -57,12 +59,14 @@ export class SettingsComponent implements OnInit {
 
   onSubmit(): void {
     if (this.settingsForm.invalid) {
+      this.notificationService.error('Please fill in all required fields');
       return;
     }
 
     const user = this.authService.getCurrentUser();
     if (!user) {
-      this.errorMessage = 'No user logged in';
+      this.notificationService.error('No user logged in');
+      // this.errorMessage = 'No user logged in';
       return;
     }
 
@@ -77,11 +81,13 @@ export class SettingsComponent implements OnInit {
       .pipe(
         map(() => {
           localStorage.setItem('loggedInUser', JSON.stringify(updatedUser));
-          this.successMessage = 'Settings updated successfully';
+          // this.successMessage = 'Settings updated successfully';
+          this.notificationService.success('Settings updated successfully');
           this.errorMessage = null;
         }),
         catchError(() => {
-          this.errorMessage = 'Failed to update settings';
+          // this.errorMessage = 'Failed to update settings';
+          this.notificationService.error('Failed to update settings');
           this.successMessage = null;
           return of(null);
         })
