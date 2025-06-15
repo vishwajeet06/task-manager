@@ -8,13 +8,14 @@ import {
 } from '../../../core/state/task.selectors';
 import {
   Observable,
-  Subject,
+  BehaviorSubject,
   combineLatest,
   debounceTime,
   distinctUntilChanged,
   map,
   startWith,
   takeUntil,
+  Subject,
 } from 'rxjs';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
@@ -35,14 +36,13 @@ import {
   updateTask,
 } from '../../../core/state/task.actions';
 import { AuthService } from '../../../core/services/auth.service';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-task-list',
   standalone: true,
   imports: [
-    FormsModule,
-    ReactiveFormsModule,
     CommonModule,
     MatTableModule,
     MatSortModule,
@@ -53,6 +53,8 @@ import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
     MatInputModule,
     MatChipsModule,
     MatSelectModule,
+    ReactiveFormsModule,
+    MatTooltipModule,
   ],
   templateUrl: './task-list.component.html',
   styleUrl: './task-list.component.scss',
@@ -78,17 +80,13 @@ export class TaskListComponent implements OnInit, OnDestroy {
 
   @ViewChild(MatSort) sort!: MatSort;
 
-  searchSubject = new Subject<string>();
+  searchSubject = new BehaviorSubject<string>('');
   statusControl = new FormControl<string>('');
   priorityControl = new FormControl<string>('');
   categoryControl = new FormControl<string>('');
   private destroy$ = new Subject<void>();
 
   categories: string[] = [];
-  initialSearchTerm: string = '';
-  initialStatus: string = '';
-  initialPriority: string = '';
-  initialCategory: string = '';
 
   constructor(
     private store: Store,
@@ -105,20 +103,20 @@ export class TaskListComponent implements OnInit, OnDestroy {
     this.error$ = this.store.select(selectTasksError);
     this.store.dispatch(loadTasks());
 
-    // Read initial filter values from query params
+    // Initialize FormControls with query params
     this.route.queryParams
       .pipe(takeUntil(this.destroy$))
       .subscribe((params) => {
-        this.initialSearchTerm = params['search'] || '';
-        (this.initialStatus = params['status'] || ''), { emitEvent: false };
-        (this.initialPriority = params['priority'] || ''), { emitEvent: false };
-        (this.initialCategory = params['category'] || ''), { emitEvent: false };
-
-        // Emit initial values to subjects
-        // this.searchSubject.next(this.initialSearchTerm);
-        // this.statusSubject.next(this.initialStatus);
-        // this.prioritySubject.next(this.initialPriority);
-        // this.categorySubject.next(this.initialCategory);
+        this.statusControl.setValue(params['status'] || '', {
+          emitEvent: false,
+        });
+        this.priorityControl.setValue(params['priority'] || '', {
+          emitEvent: false,
+        });
+        this.categoryControl.setValue(params['category'] || '', {
+          emitEvent: false,
+        });
+        this.searchSubject.next(params['search'] || '');
       });
 
     // Extract unique categories from tasks
@@ -133,22 +131,22 @@ export class TaskListComponent implements OnInit, OnDestroy {
     const search$ = this.searchSubject.pipe(
       debounceTime(300),
       distinctUntilChanged(),
-      startWith(this.initialSearchTerm),
+      startWith(''),
       takeUntil(this.destroy$)
     );
 
     const status$ = this.statusControl.valueChanges.pipe(
-      startWith(this.initialStatus),
+      startWith(this.statusControl.value),
       takeUntil(this.destroy$)
     );
 
     const priority$ = this.priorityControl.valueChanges.pipe(
-      startWith(this.initialPriority),
+      startWith(this.priorityControl.value),
       takeUntil(this.destroy$)
     );
 
     const category$ = this.categoryControl.valueChanges.pipe(
-      startWith(this.initialCategory),
+      startWith(this.categoryControl.value),
       takeUntil(this.destroy$)
     );
 
@@ -213,10 +211,6 @@ export class TaskListComponent implements OnInit, OnDestroy {
           priority: priority || null,
           category: category || null,
         };
-        // if (searchTerm) queryParams['search'] = searchTerm;
-        // if (status) queryParams['status'] = status;
-        // if (priority) queryParams['priority'] = priority;
-        // if (category) queryParams['category'] = category;
 
         this.router.navigate([], {
           relativeTo: this.route,
@@ -282,5 +276,11 @@ export class TaskListComponent implements OnInit, OnDestroy {
     if (confirm('Are you sure you want to delete this task?')) {
       this.store.dispatch(deleteTask({ id }));
     }
+  }
+
+  isOverdue(dueDate: string): boolean {
+    const currentDate = new Date('2025-06-15'); // Current date as of June 15, 2025
+    const taskDueDate = new Date(dueDate);
+    return taskDueDate < currentDate;
   }
 }

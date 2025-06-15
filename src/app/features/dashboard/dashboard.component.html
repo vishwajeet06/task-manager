@@ -9,21 +9,21 @@
     <p>Error: {{ error }}</p>
   </div>
   <div class="metrics">
-    <div class="metric-card">
+    <div class="metric-card total">
       <h3>Total Tasks</h3>
       <p>{{ totalTasks$ | async }}</p>
     </div>
-    <div class="metric-card">
+    <div class="metric-card completed">
       <h3>Completed Tasks</h3>
       <p>{{ completedTasks$ | async }}</p>
     </div>
-    <div class="metric-card">
+    <div class="metric-card overdue">
       <h3>Overdue Tasks</h3>
       <p>{{ overdueTasks$ | async }}</p>
     </div>
   </div>
-  <div style="display: flex; justify-content: space-around; flex-wrap: wrap">
-    <div style="width: 300px; margin: 20px">
+  <div class="charts">
+    <div class="chart-card">
       <h2>Tasks by Status</h2>
       <canvas
         baseChart
@@ -33,7 +33,7 @@
       >
       </canvas>
     </div>
-    <div style="width: 300px; margin: 20px">
+    <div class="chart-card">
       <h2>Tasks by Priority</h2>
       <canvas
         baseChart
@@ -44,7 +44,6 @@
       </canvas>
     </div>
   </div>
-  <!-- Update the timeline section to include icons for each activity -->
   <div class="timeline">
     <h2>Recent Activity</h2>
     <div *ngIf="error$ | async as error" class="error-message">
@@ -58,7 +57,6 @@
     </div>
     <ul>
       <li *ngFor="let activity of activities$ | async" class="activity-item">
-        <!-- Add an icon based on the activity action -->
         <mat-icon [ngClass]="getIconClass(activity.action)">
           {{ getIcon(activity.action) }}
         </mat-icon>

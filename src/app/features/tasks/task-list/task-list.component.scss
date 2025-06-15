@@ -3,24 +3,22 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #f5f5f5; /* Light background for contrast */
+  background-color: #f5f5f5;
   padding: 16px 24px;
   margin-bottom: 20px;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Styling for the h1 */
 .page-header h1 {
   margin: 0;
-  font-size: 28px; /* Matches mat-headline-5 */
+  font-size: 28px;
   font-weight: 500;
-  color: var(--primary-color, #3f51b5); /* Use Material primary color */
+  color: var(--primary-color, #3f51b5);
   position: relative;
   padding-bottom: 4px;
 }
 
-/* Optional: Add a subtle underline effect using ::after */
 .page-header h1::after {
   content: "";
   position: absolute;
@@ -32,72 +30,183 @@
   border-radius: 2px;
 }
 
-/* Styling for the actions (Add Task button) */
 .actions {
   display: flex;
   align-items: center;
 }
 
-/* Enhance the Add Task button */
 .actions button {
   padding: 8px 16px;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Hover effect for the button */
 .actions button:hover {
   transform: scale(1.05);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* Existing styles for other sections */
+/* Filters Section */
 .filters {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 20px;
+  gap: 15px;
+  margin-bottom: 30px;
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .filters mat-form-field {
-  flex: 1 1 200px;
+  flex: 1 1 220px;
+  transition: box-shadow 0.2s ease;
+}
+
+// .filters mat-form-field:hover,
+// .filters mat-form-field:focus-within {
+//   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+// }
+
+/* Highlight active filters */
+// .filters mat-form-field.active {
+//   background-color: rgba(var(--primary-color-rgb, 63, 81, 181), 0.05);
+//   border: 1px solid var(--primary-color, #3f51b5);
+//   border-radius: 4px;
+// }
+
+/* Table Section */
+.table-container {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  overflow-x: auto;
 }
 
 table {
   width: 100%;
+  border-collapse: collapse;
 }
 
-mat-form-field {
-  width: 100%;
-  margin-bottom: 10px;
+th {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
 }
 
+td {
+  font-size: 14px;
+  color: #444;
+}
+
+tr.mat-row:hover {
+  background-color: #f0f0f0;
+}
+
+/* Description column */
 td[innerHTML] {
   max-height: 100px;
   overflow-y: auto;
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
+/* Priority column */
+.priority-chip {
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  color: white;
+}
+
+.priority-low {
+  background-color: #4caf50;
+}
+.priority-medium {
+  background-color: #ff9800;
+}
+.priority-high {
+  background-color: #f44336;
+}
+.priority-critical {
+  background-color: #d81b60;
+}
+
+/* Status column */
+.status-chip {
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  color: white;
+}
+
+.status-todo {
+  background-color: #757575;
+}
+.status-inprogress {
+  background-color: #2196f3;
+}
+.status-inreview {
+  background-color: #ff9800;
+}
+.status-completed {
+  background-color: #4caf50;
+}
+
+/* Due Date column */
+.due-date-overdue {
+  color: #f44336;
+  font-weight: 500;
+}
+
+/* Tags column */
 mat-chip-listbox {
   display: flex;
   flex-wrap: wrap;
   gap: 5px;
 }
 
+mat-chip {
+  background-color: #e0e0e0;
+  color: #333;
+  font-size: 12px;
+  padding: 2px 8px;
+}
+
+/* Attachments column */
 ul {
   padding-left: 20px;
   margin: 0;
+  list-style-type: disc;
 }
 
+/* Actions column */
+td.actions-cell button {
+  margin: 0 5px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+td.actions-cell button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive Design */
 @media (max-width: 600px) {
-  .page-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
+  .filters mat-form-field {
+    flex: 1 1 100%;
   }
-  .actions {
-    width: 100%;
+
+  /* Hide less critical columns on small screens */
+  th[mat-header-cell="attachments"],
+  td[mat-cell="attachments"] {
+    display: none;
   }
-  .actions button {
-    width: 100%;
+
+  td[innerHTML] {
+    max-width: 150px;
   }
 }
