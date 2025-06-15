@@ -35,11 +35,14 @@ import {
   updateTask,
 } from '../../../core/state/task.actions';
 import { AuthService } from '../../../core/services/auth.service';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-task-list',
   standalone: true,
   imports: [
+    FormsModule,
+    ReactiveFormsModule,
     CommonModule,
     MatTableModule,
     MatSortModule,
@@ -76,9 +79,9 @@ export class TaskListComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort) sort!: MatSort;
 
   searchSubject = new Subject<string>();
-  statusSubject = new Subject<string>();
-  prioritySubject = new Subject<string>();
-  categorySubject = new Subject<string>();
+  statusControl = new FormControl<string>('');
+  priorityControl = new FormControl<string>('');
+  categoryControl = new FormControl<string>('');
   private destroy$ = new Subject<void>();
 
   categories: string[] = [];
@@ -107,15 +110,15 @@ export class TaskListComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((params) => {
         this.initialSearchTerm = params['search'] || '';
-        this.initialStatus = params['status'] || '';
-        this.initialPriority = params['priority'] || '';
-        this.initialCategory = params['category'] || '';
+        (this.initialStatus = params['status'] || ''), { emitEvent: false };
+        (this.initialPriority = params['priority'] || ''), { emitEvent: false };
+        (this.initialCategory = params['category'] || ''), { emitEvent: false };
 
         // Emit initial values to subjects
-        this.searchSubject.next(this.initialSearchTerm);
-        this.statusSubject.next(this.initialStatus);
-        this.prioritySubject.next(this.initialPriority);
-        this.categorySubject.next(this.initialCategory);
+        // this.searchSubject.next(this.initialSearchTerm);
+        // this.statusSubject.next(this.initialStatus);
+        // this.prioritySubject.next(this.initialPriority);
+        // this.categorySubject.next(this.initialCategory);
       });
 
     // Extract unique categories from tasks
@@ -134,17 +137,17 @@ export class TaskListComponent implements OnInit, OnDestroy {
       takeUntil(this.destroy$)
     );
 
-    const status$ = this.statusSubject.pipe(
+    const status$ = this.statusControl.valueChanges.pipe(
       startWith(this.initialStatus),
       takeUntil(this.destroy$)
     );
 
-    const priority$ = this.prioritySubject.pipe(
+    const priority$ = this.priorityControl.valueChanges.pipe(
       startWith(this.initialPriority),
       takeUntil(this.destroy$)
     );
 
-    const category$ = this.categorySubject.pipe(
+    const category$ = this.categoryControl.valueChanges.pipe(
       startWith(this.initialCategory),
       takeUntil(this.destroy$)
     );
@@ -204,11 +207,16 @@ export class TaskListComponent implements OnInit, OnDestroy {
     combineLatest([search$, status$, priority$, category$])
       .pipe(debounceTime(300), takeUntil(this.destroy$))
       .subscribe(([searchTerm, status, priority, category]) => {
-        const queryParams: { [key: string]: string } = {};
-        if (searchTerm) queryParams['search'] = searchTerm;
-        if (status) queryParams['status'] = status;
-        if (priority) queryParams['priority'] = priority;
-        if (category) queryParams['category'] = category;
+        const queryParams: { [key: string]: string | null } = {
+          search: searchTerm || null,
+          status: status || null,
+          priority: priority || null,
+          category: category || null,
+        };
+        // if (searchTerm) queryParams['search'] = searchTerm;
+        // if (status) queryParams['status'] = status;
+        // if (priority) queryParams['priority'] = priority;
+        // if (category) queryParams['category'] = category;
 
         this.router.navigate([], {
           relativeTo: this.route,

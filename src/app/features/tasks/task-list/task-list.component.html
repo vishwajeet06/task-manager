@@ -1,31 +1,28 @@
-<h1>Task List</h1>
-<div class="actions">
-  <button
-    mat-raised-button
-    color="primary"
-    *ngIf="isAdmin$ | async"
-    (click)="openAddDialog()"
-  >
-    Add Task
-  </button>
-</div>
+<header class="page-header">
+  <h1>Task List</h1>
+  <div class="actions">
+    <button
+      mat-raised-button
+      color="primary"
+      *ngIf="isAdmin$ | async"
+      (click)="openAddDialog()"
+    >
+      Add Task
+    </button>
+  </div>
+</header>
 <div class="filters">
   <mat-form-field appearance="outline">
     <mat-label>Search Tasks</mat-label>
     <input
       matInput
       placeholder="Search by title, description, etc."
-      [value]="initialSearchTerm"
       (input)="onSearch($event)"
     />
   </mat-form-field>
   <mat-form-field appearance="outline">
     <mat-label>Status</mat-label>
-    <mat-select
-      [value]="initialStatus"
-      (selectionChange)="statusSubject.next($event.value)"
-      placeholder="All"
-    >
+    <mat-select [formControl]="statusControl" placeholder="All">
       <mat-option value="">All</mat-option>
       <mat-option value="To Do">To Do</mat-option>
       <mat-option value="In Progress">In Progress</mat-option>
@@ -35,11 +32,7 @@
   </mat-form-field>
   <mat-form-field appearance="outline">
     <mat-label>Priority</mat-label>
-    <mat-select
-      [value]="initialPriority"
-      (selectionChange)="prioritySubject.next($event.value)"
-      placeholder="All"
-    >
+    <mat-select [formControl]="priorityControl" placeholder="All">
       <mat-option value="">All</mat-option>
       <mat-option value="Low">Low</mat-option>
       <mat-option value="Medium">Medium</mat-option>
@@ -49,11 +42,7 @@
   </mat-form-field>
   <mat-form-field appearance="outline">
     <mat-label>Category</mat-label>
-    <mat-select
-      [value]="initialCategory"
-      (selectionChange)="categorySubject.next($event.value)"
-      placeholder="All"
-    >
+    <mat-select [formControl]="categoryControl" placeholder="All">
       <mat-option value="">All</mat-option>
       <mat-option *ngFor="let category of categories" [value]="category">{{
         category
