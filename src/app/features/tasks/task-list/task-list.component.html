@@ -175,6 +175,14 @@
           >
             <mat-icon>delete</mat-icon>
           </button>
+          <button
+            mat-icon-button
+            color="accent"
+            (click)="onComment(task)"
+            matTooltip="Comment"
+          >
+            <mat-icon>comment</mat-icon>
+          </button>
         </td>
       </ng-container>
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

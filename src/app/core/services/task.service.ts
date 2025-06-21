@@ -28,6 +28,16 @@ export class TaskService {
       .pipe(catchError(() => of([])));
   }
 
+  getTaskBySlug(slug: string): Observable<Task | null> {
+    return this.getTasks().pipe(
+      map((tasks) => {
+        const task = tasks.find((t) => this.generateSlug(t.title) === slug);
+        return task || null;
+      }),
+      catchError(() => of(null))
+    );
+  }
+
   // addTask(task: Omit<Task, 'id'>): Observable<Task> {
   //   return this.http.post<Task>(this.taskApiUrl, task);
   // }
@@ -130,6 +140,10 @@ export class TaskService {
     return this.http.get<Activity[]>(
       `${this.activityApiUrl}?_sort=timestamp&_order=desc`
     );
+  }
+
+  private generateSlug(title: string): string {
+    return title.toLowerCase().replace(/ /g, '-');
   }
 }
 

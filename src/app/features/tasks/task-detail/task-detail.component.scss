@@ -1,0 +1,11 @@
+.task-detail {
+  margin: 16px;
+  mat-card {
+    padding: 16px;
+  }
+  .loading {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+}

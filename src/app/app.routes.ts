@@ -16,6 +16,14 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
   {
+    path: 'tasks/:taskSlug', // New route for task details
+    loadComponent: () =>
+      import('./features/tasks/task-detail/task-detail.component').then(
+        (m) => m.TaskDetailComponent
+      ),
+    canActivate: [authGuard],
+  },
+  {
     path: 'tasks',
     loadComponent: () =>
       import('./features/tasks/task-list/task-list.component').then(

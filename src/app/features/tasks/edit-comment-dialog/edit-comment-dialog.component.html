@@ -1,0 +1,21 @@
+<h2 mat-dialog-title>Edit Comment</h2>
+<mat-dialog-content>
+  <mat-form-field>
+    <textarea
+      matInput
+      [(ngModel)]="data.comment.text"
+      placeholder="Edit your comment"
+    ></textarea>
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="onSave()"
+    [disabled]="!data.comment.text?.trim()"
+  >
+    Save
+  </button>
+</mat-dialog-actions>

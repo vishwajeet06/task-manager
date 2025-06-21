@@ -283,4 +283,14 @@ export class TaskListComponent implements OnInit, OnDestroy {
     const taskDueDate = new Date(dueDate);
     return taskDueDate < currentDate;
   }
+
+  generateSlug(title: string): string {
+    return title.toLowerCase().replace(/ /g, '-');
+  }
+
+  // New method to navigate to task details for comments
+  onComment(task: Task) {
+    const slug = this.generateSlug(task.title);
+    this.router.navigate(['/tasks', slug]);
+  }
 }

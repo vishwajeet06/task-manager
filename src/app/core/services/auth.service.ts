@@ -89,6 +89,7 @@ export class AuthService {
 
   getCurrentUser(): any {
     const user = localStorage.getItem(this.loggedInUserKey);
+    // console.log(user);
     return user ? JSON.parse(user) : null;
   }
 }

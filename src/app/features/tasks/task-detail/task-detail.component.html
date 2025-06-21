@@ -1,0 +1,24 @@
+<div *ngIf="task" class="task-detail">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>{{ task.title }}</mat-card-title>
+      <mat-card-subtitle>Due: {{ task.dueDate }}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <div [innerHTML]="task.description"></div>
+      <!-- Changed from <p> to <div> -->
+      <p><strong>Priority:</strong> {{ task.priority }}</p>
+      <p><strong>Status:</strong> {{ task.status }}</p>
+      <p><strong>Category:</strong> {{ task.category }}</p>
+      <p><strong>Assigned To:</strong> {{ task.assignedTo }}</p>
+      <p><strong>Tags:</strong></p>
+      <ul>
+        <li *ngFor="let tag of task.tags">{{ tag }}</li>
+      </ul>
+    </mat-card-content>
+  </mat-card>
+  <app-task-comments [taskId]="task.id"></app-task-comments>
+</div>
+<div *ngIf="!task" class="loading">
+  <mat-spinner></mat-spinner>
+</div>

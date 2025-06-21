@@ -1,0 +1,80 @@
+<div class="comments-section">
+  <div class="comments-header">
+    <h3>Comments</h3>
+    <span class="comment-count"
+      >{{ (comments$ | async)?.length || 0 }} Comments</span
+    >
+  </div>
+  <div class="comments-container">
+    <mat-card
+      *ngFor="let comment of comments$ | async"
+      class="comment-card"
+      (mouseover)="hoveredComment = comment"
+      (mouseleave)="hoveredComment = null"
+    >
+      <mat-card-header>
+        <div
+          mat-card-avatar
+          class="comment-avatar"
+          [style.background-color]="getAvatarColor(comment.userName)"
+        >
+          {{ comment.userName?.charAt(0) || "A" }}
+        </div>
+        <mat-card-title>{{ comment.userName || "Anonymous" }}</mat-card-title>
+        <mat-card-subtitle>{{
+          comment.timestamp | date : "short"
+        }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content class="comment-content">
+        <p class="comment-text">{{ comment.text }}</p>
+      </mat-card-content>
+      <mat-card-actions
+        class="comment-actions"
+        *ngIf="hoveredComment === comment || canEditComment(comment)"
+      >
+        <button
+          mat-icon-button
+          color="primary"
+          (click)="editComment(comment)"
+          *ngIf="canEditComment(comment)"
+          matTooltip="Edit"
+        >
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button
+          mat-icon-button
+          color="warn"
+          (click)="deleteComment(comment.id)"
+          *ngIf="canEditComment(comment)"
+          matTooltip="Delete"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+    <div *ngIf="(comments$ | async)?.length === 0" class="no-comments">
+      <p>No comments yet. Add one below!</p>
+      <mat-icon>sentiment_very_dissatisfied</mat-icon>
+    </div>
+  </div>
+  <div class="comment-input">
+    <mat-form-field appearance="fill" class="full-width">
+      <textarea
+        matInput
+        placeholder="Add a comment..."
+        [(ngModel)]="newComment"
+        #commentInput
+        [rows]="3"
+      ></textarea>
+    </mat-form-field>
+    <button
+      mat-flat-button
+      color="primary"
+      (click)="onPostComment()"
+      [disabled]="!newComment.trim()"
+      class="post-button"
+    >
+      <mat-icon>send</mat-icon> Post
+    </button>
+  </div>
+</div>
