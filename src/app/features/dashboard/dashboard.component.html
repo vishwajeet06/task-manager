@@ -64,7 +64,7 @@
           <span class="timestamp">{{
             activity.timestamp | date : "medium"
           }}</span>
-          <span class="message">{{ activity.details }}</span>
+          <span class="message" [innerHTML]="activity.details"></span>
         </div>
       </li>
     </ul>

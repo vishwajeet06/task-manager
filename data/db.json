@@ -17,7 +17,7 @@
       "comments": [
         {
           "id": "1750507954170",
-          "text": "<p>New&nbsp;testing&nbsp;coming&nbsp;updates&nbsp;Done&nbsp;Well&nbsp;Done</p>",
+          "text": "<p>New&nbsp;testing&nbsp;coming&nbsp;updates&nbsp;Done&nbsp;<strong>Well&nbsp;Done</strong></p>",
           "userName": "Vishwajeet",
           "timestamp": "2025-06-21T12:12:34.170Z"
         },
@@ -204,6 +204,34 @@
       "action": "Task Updated",
       "details": "Task \"Design Homepage\" was updated.",
       "timestamp": "2025-06-25T13:25:24.825Z"
+    },
+    {
+      "id": "a643",
+      "taskId": "1",
+      "action": "Comment Edited",
+      "details": "by Vishwajeet: <p>New&nbsp;testing&...",
+      "timestamp": "2025-06-25T14:10:18.935Z"
+    },
+    {
+      "id": "05d7",
+      "taskId": "1",
+      "action": "Comment Edited",
+      "details": "by Vishwajeet: <p>New&nbsp;testing&...",
+      "timestamp": "2025-06-25T14:10:19.075Z"
+    },
+    {
+      "id": "1093",
+      "taskId": "1",
+      "action": "Comment Added",
+      "details": "by Vishwajeet kumar: Hello...",
+      "timestamp": "2025-06-25T14:13:55.616Z"
+    },
+    {
+      "id": "24c8",
+      "taskId": "1",
+      "action": "Comment Deleted",
+      "details": "Comment deleted by Vishwajeet kumar: Hello...",
+      "timestamp": "2025-06-25T14:16:47.749Z"
     }
   ],
   "users": [
