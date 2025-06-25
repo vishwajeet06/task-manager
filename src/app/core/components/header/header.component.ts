@@ -4,11 +4,15 @@ import {
   OnInit,
   OnDestroy,
   ChangeDetectorRef,
+  Output,
+  EventEmitter,
+  Input,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../../services/auth.service';
 import { Observable, Subscription } from 'rxjs';
 import { NotificationService } from '../../services/notification.service';
@@ -16,7 +20,13 @@ import { NotificationService } from '../../services/notification.service';
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, RouterModule, MatToolbarModule, MatButtonModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    MatToolbarModule,
+    MatButtonModule,
+    MatIconModule,
+  ],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -25,6 +35,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
   isLoggedIn$!: Observable<boolean>;
   userName: string | null = null;
   private userSub!: Subscription;
+  private _isDarkTheme = false;
+  @Input() set isDarkTheme(value: boolean) {
+    this._isDarkTheme = value;
+    this.cdr.markForCheck(); // Force change detection
+  }
+  get isDarkTheme(): boolean {
+    return this._isDarkTheme;
+  }
+  @Output() themeToggled = new EventEmitter<void>();
 
   constructor(
     private authService: AuthService,
@@ -57,5 +76,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.notificationService.success('Logged out successfully');
       this.router.navigate(['/login']);
     });
+  }
+
+  onThemeToggle(): void {
+    this.themeToggled.emit();
   }
 }

@@ -1,4 +1,7 @@
-<app-header></app-header>
+<app-header
+  [isDarkTheme]="isDarkTheme"
+  (themeToggled)="toggleTheme()"
+></app-header>
 <router-outlet></router-outlet>
 
 <!-- <mat-toolbar color="primary">

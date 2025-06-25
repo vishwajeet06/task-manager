@@ -2,21 +2,60 @@
 @import "quill/dist/quill.core.css";
 @import "quill/dist/quill.snow.css";
 
+/* Global CSS Variables */
+:root {
+  --background: #ffffff;
+  --text-color: #333333;
+  --primary: #00695c;
+  --accent: #3f51b1;
+  --success-bg: #4caf50;
+  --error-bg: #f44336;
+}
+
+.dark-theme {
+  --background: #1e1e1e;
+  --text-color: #e0e0e0;
+  --primary: #00c853;
+  --accent: #7e57c2;
+  --success-bg: #388e3c;
+  --error-bg: #d32f2f;
+}
+
 html,
 body {
   height: 100%;
 }
+
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+  background: var(--background);
+  color: var(--text-color);
+  transition: all 0.3s ease;
 }
 
+/* Global Material Input Styling */
+mat-form-field {
+  width: 100%;
+}
+
+mat-form-field .mat-input-element {
+  background-color: rgba(0, 0, 0, 0.04); /* Light mode: subtle gray */
+  color: var(--text-color);
+}
+
+.dark-theme mat-form-field .mat-input-element {
+  background-color: rgba(255, 255, 255, 0.1); /* Dark mode: light gray */
+  color: var(--text-color);
+}
+
+/* Snackbar Styles with Theme Variables */
 .success-snackbar {
-  background-color: #4caf50; /* Green for success */
+  background-color: var(--success-bg);
   color: white;
 }
 
 .error-snackbar {
-  background-color: #f44336; /* Red for error */
+  background-color: var(--error-bg);
   color: white;
 }
