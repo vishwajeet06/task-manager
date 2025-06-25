@@ -23,41 +23,42 @@
         >
           {{ comment.userName?.charAt(0)?.toUpperCase() || "A" }}
         </div>
-        <mat-card-title class="comment-author">{{
-          comment.userName || "Anonymous"
-        }}</mat-card-title>
-        <mat-card-subtitle class="comment-time">{{
-          comment.timestamp | date : "medium"
-        }}</mat-card-subtitle>
+        <div class="header-content">
+          <mat-card-title class="comment-author">{{
+            comment.userName || "Anonymous"
+          }}</mat-card-title>
+          <mat-card-subtitle class="comment-time">{{
+            comment.timestamp | date : "medium"
+          }}</mat-card-subtitle>
+        </div>
+        <mat-card-actions
+          class="comment-actions"
+          *ngIf="hoveredComment === comment || canEditComment(comment)"
+        >
+          <button
+            mat-icon-button
+            class="action-btn edit-btn"
+            (click)="editComment(comment)"
+            *ngIf="canEditComment(comment)"
+            matTooltip="Edit"
+          >
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            class="action-btn delete-btn"
+            (click)="deleteComment(comment.id)"
+            *ngIf="canEditComment(comment)"
+            matTooltip="Delete"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-card-actions>
       </mat-card-header>
 
       <mat-card-content class="comment-content">
         <p class="comment-text" [innerHTML]="comment.text"></p>
       </mat-card-content>
-
-      <mat-card-actions
-        class="comment-actions"
-        *ngIf="hoveredComment === comment || canEditComment(comment)"
-      >
-        <button
-          mat-icon-button
-          class="action-btn edit-btn"
-          (click)="editComment(comment)"
-          *ngIf="canEditComment(comment)"
-          matTooltip="Edit"
-        >
-          <mat-icon>edit</mat-icon>
-        </button>
-        <button
-          mat-icon-button
-          class="action-btn delete-btn"
-          (click)="deleteComment(comment.id)"
-          *ngIf="canEditComment(comment)"
-          matTooltip="Delete"
-        >
-          <mat-icon>delete</mat-icon>
-        </button>
-      </mat-card-actions>
     </mat-card>
 
     <!-- Empty State -->

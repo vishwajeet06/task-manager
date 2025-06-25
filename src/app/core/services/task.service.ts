@@ -1,4 +1,3 @@
-// src/app/services/task.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, catchError, map, of, switchMap, tap } from 'rxjs';
@@ -6,6 +5,7 @@ import { Task } from '../models/task';
 import { Activity } from '../models/activity';
 import { AuthService } from './auth.service';
 import { NotificationService } from './notification.service';
+import { v4 as uuidv4 } from 'uuid'; // Install via `npm install uuid`
 
 @Injectable({ providedIn: 'root' })
 export class TaskService {
@@ -23,9 +23,22 @@ export class TaskService {
   }
 
   getTasks(): Observable<Task[]> {
-    return this.http
-      .get<Task[]>(this.taskApiUrl)
-      .pipe(catchError(() => of([])));
+    return this.http.get<Task[]>(this.taskApiUrl).pipe(
+      map((tasks) =>
+        tasks.map((task) => ({
+          ...task,
+          uniqueId: task.uniqueId || uuidv4(), // Assign uniqueId if not present
+        }))
+      ),
+      tap((updatedTasks) => {
+        updatedTasks.forEach((task) => {
+          if (!task.uniqueId || task.uniqueId !== task.uniqueId) {
+            this.updateTask(task.id, { uniqueId: task.uniqueId }).subscribe();
+          }
+        });
+      }),
+      catchError(() => of([]))
+    );
   }
 
   getTaskBySlug(slug: string): Observable<Task | null> {
@@ -38,10 +51,6 @@ export class TaskService {
     );
   }
 
-  // addTask(task: Omit<Task, 'id'>): Observable<Task> {
-  //   return this.http.post<Task>(this.taskApiUrl, task);
-  // }
-
   addTask(task: any): Observable<any> {
     return this.checkAdminAccess().pipe(
       switchMap((isAdmin) => {
@@ -49,11 +58,12 @@ export class TaskService {
           this.notificationService.error('Only admins can add tasks');
           throw new Error('Only admins can add tasks');
         }
+        const taskWithUniqueId = { ...task, uniqueId: uuidv4() }; // Assign uniqueId
         return this.http
-          .post<any>(this.taskApiUrl, task)
+          .post<any>(this.taskApiUrl, taskWithUniqueId)
           .pipe(
             tap(() =>
-              this.notificationService.success('Task added succesfully')
+              this.notificationService.success('Task added successfully')
             )
           );
       }),
@@ -65,10 +75,6 @@ export class TaskService {
     );
   }
 
-  // updateTask(id: string, task: Partial<Task>): Observable<Task> {
-  //   return this.http.patch<Task>(`${this.taskApiUrl}/${id}`, task);
-  // }
-
   updateTask(id: string, task: Partial<Task>): Observable<any> {
     return this.checkAdminAccess().pipe(
       switchMap((isAdmin) => {
@@ -76,11 +82,12 @@ export class TaskService {
           this.notificationService.error('Only admins can update tasks');
           throw new Error('Only admins can update tasks');
         }
+        const updateData = { ...task, uniqueId: task.uniqueId || uuidv4() };
         return this.http
-          .put<any>(`${this.taskApiUrl}/${id}`, task)
+          .patch<any>(`${this.taskApiUrl}/${id}`, updateData) // Use patch for partial update
           .pipe(
             tap(() =>
-              this.notificationService.success('Task updated succesfully')
+              this.notificationService.success('Task updated successfully')
             )
           );
       }),
@@ -91,10 +98,6 @@ export class TaskService {
       })
     );
   }
-
-  // deleteTask(id: string): Observable<void> {
-  //   return this.http.delete<void>(`${this.taskApiUrl}/${id}`);
-  // }
 
   deleteTask(id: string): Observable<boolean> {
     return this.checkAdminAccess().pipe(
@@ -146,5 +149,3 @@ export class TaskService {
     return title.toLowerCase().replace(/ /g, '-');
   }
 }
-
-// tap Operator: Used to show success messages after successful operations without altering the observable stream.

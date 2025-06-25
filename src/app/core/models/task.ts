@@ -2,6 +2,7 @@ export interface Task {
   id: string;
   title: string;
   description: string;
+  uniqueId?: string;
   priority: 'Low' | 'Medium' | 'High' | 'Critical';
   dueDate: string;
   status: 'To Do' | 'In Progress' | 'In Review' | 'Completed';
@@ -9,6 +10,7 @@ export interface Task {
   tags: string[];
   assignedTo: string;
   attachments: { name: string; size: number }[];
+  comments?: [];
 }
 
 export type TaskStatus = Task['status'];

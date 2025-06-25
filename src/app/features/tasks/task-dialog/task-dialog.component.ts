@@ -72,6 +72,7 @@ export class TaskDialogComponent {
         tags: data.tags,
         assignedTo: data.assignedTo,
         attachments: data.attachments,
+        uniqueId: data.uniqueId,
       };
       this.dueDate = new Date(data.dueDate);
       this.tagsInput = data.tags.join(', ');
@@ -85,6 +86,7 @@ export class TaskDialogComponent {
         category: '',
         tags: [],
         assignedTo: '',
+        uniqueId: '',
         attachments: [],
       };
       this.dueDate = new Date();

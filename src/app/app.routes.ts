@@ -16,7 +16,15 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
   {
-    path: 'tasks/:taskSlug', // New route for task details
+    path: 'tasks/:taskSlug', // Existing route for slug-based navigation
+    loadComponent: () =>
+      import('./features/tasks/task-detail/task-detail.component').then(
+        (m) => m.TaskDetailComponent
+      ),
+    canActivate: [authGuard],
+  },
+  {
+    path: 'tasks/detail/:uniqueId', // New route for uniqueId-based sharing
     loadComponent: () =>
       import('./features/tasks/task-detail/task-detail.component').then(
         (m) => m.TaskDetailComponent
