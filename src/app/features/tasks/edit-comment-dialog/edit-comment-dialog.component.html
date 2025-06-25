@@ -1,20 +1,27 @@
-<h2 mat-dialog-title>Edit Comment</h2>
-<mat-dialog-content>
-  <mat-form-field>
-    <textarea
-      matInput
-      [(ngModel)]="data.comment.text"
-      placeholder="Edit your comment"
-    ></textarea>
-  </mat-form-field>
+<h2 mat-dialog-title class="dialog-title">Edit Comment</h2>
+<mat-dialog-content class="dialog-content">
+  <div class="editor-container">
+    <quill-editor
+      [(ngModel)]="editedText"
+      [styles]="{ height: '200px' }"
+      [modules]="quillConfig"
+      placeholder="Edit your comment..."
+      class="comment-editor"
+      (onContentChanged)="charCount = getCharCount(editedText)"
+    ></quill-editor>
+    <div class="char-count" [class.over-limit]="charCount > 500">
+      {{ charCount }}/500
+    </div>
+  </div>
 </mat-dialog-content>
-<mat-dialog-actions>
-  <button mat-button (click)="onCancel()">Cancel</button>
+<mat-dialog-actions class="dialog-actions">
+  <button mat-button (click)="onCancel()" class="cancel-button">Cancel</button>
   <button
     mat-raised-button
     color="primary"
     (click)="onSave()"
-    [disabled]="!data.comment.text?.trim()"
+    [disabled]="!editedText?.trim() || charCount > 500"
+    class="save-button"
   >
     Save
   </button>

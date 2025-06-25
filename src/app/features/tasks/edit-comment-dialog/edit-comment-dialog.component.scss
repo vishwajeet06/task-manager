@@ -1,64 +1,87 @@
-.comments-section {
-  margin: 16px;
+.dialog-title {
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: white;
+  margin-bottom: 16px;
+  background: #004d40;
+  padding: 12px;
+  border-radius: 8px 8px 0 0;
+}
 
-  .comments-header {
-    margin-bottom: 16px;
-    h3 {
-      font-size: 1.5rem;
-      font-weight: 500;
-      color: #333;
-    }
-  }
+.dialog-content {
+  padding: 16px 0;
+  width: 100%; // Ensure full width of dialog
 
-  .comments-container {
-    max-height: 400px;
-    overflow-y: auto;
-    margin-bottom: 16px;
+  .editor-container {
+    width: 100%;
 
-    .comment-card {
-      margin-bottom: 8px;
-      transition: box-shadow 0.3s ease;
-      &:hover {
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    .comment-editor {
+      width: 100% !important; // Force full width
+      max-width: 100% !important; // Prevent expansion
+
+      // Fix for Quill editor container
+      .ql-container {
+        width: 100% !important;
+        max-width: 100% !important;
+        border: 1px solid #e0e0e0 !important;
+
+        .ql-editor {
+          width: 100% !important;
+          max-width: 100% !important;
+          white-space: pre-wrap !important;
+          word-break: break-word !important;
+          padding: 12px 15px;
+        }
       }
 
-      .comment-avatar {
-        background-color: #1976d2;
-        color: white;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: bold;
-      }
-
-      .comment-actions {
-        justify-content: flex-end;
-        button {
-          margin-left: 8px;
+      &:focus-within {
+        .ql-container {
+          border-color: #00695c !important;
+          box-shadow: 0 0 0 2px rgba(0, 105, 92, 0.2);
         }
       }
     }
 
-    .no-comments {
-      text-align: center;
-      color: #666;
-      padding: 16px;
+    .char-count {
+      margin-top: 8px;
+      font-size: 0.9rem;
+      color: #757575;
+      text-align: right;
+
+      &.over-limit {
+        color: #d32f2f;
+      }
+    }
+  }
+}
+
+.dialog-actions {
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 16px;
+
+  .cancel-button {
+    color: #757575;
+    padding: 6px 16px;
+    border: 1px solid #757575;
+    border-radius: 4px;
+
+    &:hover {
+      background-color: #f5f5f5;
     }
   }
 
-  .comment-input {
-    display: flex;
-    gap: 16px;
+  .save-button {
+    background-color: #00695c;
+    color: white;
+    padding: 6px 16px;
 
-    .full-width {
-      width: 100%;
+    &:hover {
+      background-color: #004d40;
     }
 
-    .post-button {
-      align-self: flex-end;
+    &:disabled {
+      background-color: #e0e0e0;
     }
   }
 }

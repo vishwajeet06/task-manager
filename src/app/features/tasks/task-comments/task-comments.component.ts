@@ -1,5 +1,12 @@
 import { AsyncPipe, CommonModule } from '@angular/common';
-import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { CommentService } from '../../../core/services/comment.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
