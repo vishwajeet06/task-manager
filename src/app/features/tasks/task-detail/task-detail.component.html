@@ -8,7 +8,12 @@
             >Due: {{ task.dueDate | date : "mediumDate" }}</mat-card-subtitle
           >
         </div>
-        <button mat-button (click)="shareTask()" class="share-button">
+        <button
+          mat-button
+          (click)="shareTask()"
+          class="share-button"
+          aria-label="Share task URL"
+        >
           <mat-icon>share</mat-icon> Copy Task URL
         </button>
       </mat-card-header>
@@ -38,5 +43,5 @@
   </div>
 </div>
 <div *ngIf="!task" class="loading">
-  <mat-spinner></mat-spinner>
+  <mat-spinner [diameter]="40"></mat-spinner>
 </div>

@@ -13,9 +13,19 @@ import { HeaderComponent } from './core/components/header/header.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent implements OnInit {
+  isDarkTheme = false;
+
   constructor(private store: Store) {}
 
   ngOnInit(): void {
     this.store.dispatch(loadActivities());
+    this.isDarkTheme = localStorage.getItem('theme') === 'dark';
+    document.body.classList.toggle('dark-theme', this.isDarkTheme);
+  }
+
+  toggleTheme() {
+    this.isDarkTheme = !this.isDarkTheme;
+    document.body.classList.toggle('dark-theme', this.isDarkTheme);
+    localStorage.setItem('theme', this.isDarkTheme ? 'dark' : 'light');
   }
 }

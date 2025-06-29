@@ -6,29 +6,29 @@
       color="primary"
       *ngIf="isAdmin$ | async"
       (click)="openAddDialog()"
+      aria-label="Add new task"
     >
       Add Task
     </button>
   </div>
 </header>
 <div class="filters">
-  <mat-form-field
-    appearance="outline"
-    [ngClass]="{ active: searchSubject | async }"
-  >
+  <mat-form-field appearance="outline">
     <mat-label>Search Tasks</mat-label>
     <input
       matInput
       placeholder="Search by title, description, etc."
       (input)="onSearch($event)"
+      aria-label="Search tasks"
     />
   </mat-form-field>
-  <mat-form-field
-    appearance="outline"
-    [ngClass]="{ active: statusControl.value }"
-  >
+  <mat-form-field appearance="outline">
     <mat-label>Status</mat-label>
-    <mat-select [formControl]="statusControl" placeholder="All">
+    <mat-select
+      [formControl]="statusControl"
+      placeholder="All"
+      aria-label="Filter by status"
+    >
       <mat-option value="">All</mat-option>
       <mat-option value="To Do">To Do</mat-option>
       <mat-option value="In Progress">In Progress</mat-option>
@@ -36,12 +36,13 @@
       <mat-option value="Completed">Completed</mat-option>
     </mat-select>
   </mat-form-field>
-  <mat-form-field
-    appearance="outline"
-    [ngClass]="{ active: priorityControl.value }"
-  >
+  <mat-form-field appearance="outline">
     <mat-label>Priority</mat-label>
-    <mat-select [formControl]="priorityControl" placeholder="All">
+    <mat-select
+      [formControl]="priorityControl"
+      placeholder="All"
+      aria-label="Filter by priority"
+    >
       <mat-option value="">All</mat-option>
       <mat-option value="Low">Low</mat-option>
       <mat-option value="Medium">Medium</mat-option>
@@ -49,12 +50,13 @@
       <mat-option value="Critical">Critical</mat-option>
     </mat-select>
   </mat-form-field>
-  <mat-form-field
-    appearance="outline"
-    [ngClass]="{ active: categoryControl.value }"
-  >
+  <mat-form-field appearance="outline">
     <mat-label>Category</mat-label>
-    <mat-select [formControl]="categoryControl" placeholder="All">
+    <mat-select
+      [formControl]="categoryControl"
+      placeholder="All"
+      aria-label="Filter by category"
+    >
       <mat-option value="">All</mat-option>
       <mat-option *ngFor="let category of categories" [value]="category">{{
         category
@@ -62,11 +64,15 @@
     </mat-select>
   </mat-form-field>
 </div>
-<div *ngIf="loading$ | async; else taskTable">
+<div
+  *ngIf="loading$ | async; else taskTable"
+  class="loading"
+  aria-live="polite"
+>
   <p>Loading tasks...</p>
 </div>
 <ng-template #taskTable>
-  <div *ngIf="error$ | async as error">
+  <div *ngIf="error$ | async as error" class="error-message" role="alert">
     <p>Error: {{ error }}</p>
   </div>
   <div class="table-container">
@@ -75,6 +81,7 @@
       [dataSource]="dataSource"
       matSort
       (matSortChange)="sortData($event)"
+      aria-label="Task list table"
     >
       <ng-container matColumnDef="title">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Title</th>
@@ -163,6 +170,7 @@
             *ngIf="isAdmin$ | async"
             (click)="openEditDialog(task)"
             matTooltip="Edit Task"
+            aria-label="Edit task"
           >
             <mat-icon>edit</mat-icon>
           </button>
@@ -172,6 +180,7 @@
             *ngIf="isAdmin$ | async"
             (click)="deleteTask(task.id)"
             matTooltip="Delete Task"
+            aria-label="Delete task"
           >
             <mat-icon>delete</mat-icon>
           </button>
@@ -180,6 +189,7 @@
             color="accent"
             (click)="onComment(task)"
             matTooltip="Comment"
+            aria-label="Add comment"
           >
             <mat-icon>comment</mat-icon>
           </button>

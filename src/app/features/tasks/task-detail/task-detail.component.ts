@@ -49,7 +49,6 @@ export class TaskDetailComponent implements OnInit {
     console.log('Fetched slug:', slug, 'uniqueId:', uniqueId);
 
     if (uniqueId) {
-      // Fetch by uniqueId if available (new sharing route)
       this.taskService.getTasks().subscribe((tasks) => {
         const task = tasks.find((t: Task) => t.uniqueId === uniqueId);
         console.log('Fetched task by uniqueId:', task);
@@ -57,7 +56,6 @@ export class TaskDetailComponent implements OnInit {
         this.cdr.detectChanges();
       });
     } else if (slug) {
-      // Fallback to slug-based fetching
       this.taskService.getTaskBySlug(slug).subscribe({
         next: (task) => {
           console.log('Fetched task in subscribe:', task);

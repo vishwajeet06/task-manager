@@ -1,6 +1,6 @@
 <div class="login-container">
   <h2>Login</h2>
-  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" aria-label="Login form">
     <mat-form-field appearance="fill">
       <mat-label>Email</mat-label>
       <input
@@ -9,6 +9,7 @@
         type="email"
         formControlName="email"
         required
+        aria-required="true"
       />
       <mat-error *ngIf="loginForm.get('email')?.hasError('required')">
         Email is required
@@ -26,13 +27,14 @@
         type="password"
         formControlName="password"
         required
+        aria-required="true"
       />
       <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
         Password is required
       </mat-error>
     </mat-form-field>
 
-    <div *ngIf="errorMessage" class="error-message">
+    <div *ngIf="errorMessage" class="error-message" role="alert">
       {{ errorMessage }}
     </div>
 
@@ -41,9 +43,13 @@
       color="primary"
       type="submit"
       [disabled]="loginForm.invalid"
+      aria-label="Submit login"
     >
       Login
     </button>
   </form>
-  <p>Don't have an account? <a routerLink="/register">Register here</a></p>
+  <p>
+    Don't have an account?
+    <a routerLink="/register" aria-label="Register here">Register here</a>
+  </p>
 </div>

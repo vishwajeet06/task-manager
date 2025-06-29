@@ -1,4 +1,10 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Task } from '../../../core/models/task';
 import {
@@ -57,7 +63,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatTooltipModule,
   ],
   templateUrl: './task-list.component.html',
-  styleUrl: './task-list.component.scss',
+  styleUrls: ['./task-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TaskListComponent implements OnInit, OnDestroy {
   tasks$!: Observable<Task[]>;
@@ -103,7 +110,6 @@ export class TaskListComponent implements OnInit, OnDestroy {
     this.error$ = this.store.select(selectTasksError);
     this.store.dispatch(loadTasks());
 
-    // Initialize FormControls with query params
     this.route.queryParams
       .pipe(takeUntil(this.destroy$))
       .subscribe((params) => {
@@ -119,7 +125,6 @@ export class TaskListComponent implements OnInit, OnDestroy {
         this.searchSubject.next(params['search'] || '');
       });
 
-    // Extract unique categories from tasks
     this.tasks$.pipe(takeUntil(this.destroy$)).subscribe((tasks) => {
       this.categories = [
         ...new Set(
@@ -150,20 +155,18 @@ export class TaskListComponent implements OnInit, OnDestroy {
       takeUntil(this.destroy$)
     );
 
-    // Combine filters and update table
     combineLatest([this.tasks$, search$, status$, priority$, category$])
       .pipe(
         map(([tasks, searchTerm, status, priority, category]) => {
           let filteredTasks = tasks;
 
-          // Apply search filter
           if (searchTerm) {
             const lowerTerm = searchTerm.toLowerCase();
             filteredTasks = filteredTasks.filter(
               (task) =>
                 task.title.toLowerCase().includes(lowerTerm) ||
                 task.description.toLowerCase().includes(lowerTerm) ||
-                task.category.toLowerCase().includes(lowerTerm) ||
+                task.category?.toLowerCase().includes(lowerTerm) ||
                 task.tags.some((tag) =>
                   tag.toLowerCase().includes(lowerTerm)
                 ) ||
@@ -171,21 +174,18 @@ export class TaskListComponent implements OnInit, OnDestroy {
             );
           }
 
-          // Apply status filter
           if (status) {
             filteredTasks = filteredTasks.filter(
               (task) => task.status === status
             );
           }
 
-          // Apply priority filter
           if (priority) {
             filteredTasks = filteredTasks.filter(
               (task) => task.priority === priority
             );
           }
 
-          // Apply category filter
           if (category) {
             filteredTasks = filteredTasks.filter(
               (task) => task.category === category
@@ -201,7 +201,6 @@ export class TaskListComponent implements OnInit, OnDestroy {
         this.dataSource.sort = this.sort;
       });
 
-    // Update query params when filters change
     combineLatest([search$, status$, priority$, category$])
       .pipe(debounceTime(300), takeUntil(this.destroy$))
       .subscribe(([searchTerm, status, priority, category]) => {
@@ -263,10 +262,7 @@ export class TaskListComponent implements OnInit, OnDestroy {
       .subscribe((result: Omit<Task, 'id'> | undefined) => {
         if (result) {
           this.store.dispatch(
-            updateTask({
-              id: task.id,
-              task: result as Omit<Task, 'id'>,
-            })
+            updateTask({ id: task.id, task: result as Omit<Task, 'id'> })
           );
         }
       });
@@ -288,7 +284,6 @@ export class TaskListComponent implements OnInit, OnDestroy {
     return title.toLowerCase().replace(/ /g, '-');
   }
 
-  // New method to navigate to task details for comments
   onComment(task: Task) {
     const slug = this.generateSlug(task.title);
     this.router.navigate(['/tasks', slug]);

@@ -7,8 +7,28 @@
     <button mat-button routerLink="/settings">Settings</button>
     <span class="user-name">{{ userName }}</span>
     <button mat-button (click)="logout()">Logout</button>
+    <button
+      mat-icon-button
+      class="theme-toggle"
+      (click)="onThemeToggle()"
+      [attr.aria-label]="
+        'Toggle theme to ' + (isDarkTheme ? 'light' : 'dark') + ' mode'
+      "
+    >
+      <mat-icon>{{ isDarkTheme ? "light_mode" : "dark_mode" }}</mat-icon>
+    </button>
   </ng-container>
   <ng-template #notLoggedIn>
     <button mat-button routerLink="/login">Login</button>
+    <button
+      mat-icon-button
+      class="theme-toggle"
+      (click)="onThemeToggle()"
+      [attr.aria-label]="
+        'Toggle theme to ' + (isDarkTheme ? 'light' : 'dark') + ' mode'
+      "
+    >
+      <mat-icon>{{ isDarkTheme ? "light_mode" : "dark_mode" }}</mat-icon>
+    </button>
   </ng-template>
 </mat-toolbar>

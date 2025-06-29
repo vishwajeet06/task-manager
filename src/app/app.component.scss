@@ -1,14 +1,8 @@
-// mat-toolbar {
-//   justify-content: space-between;
-// }
-
-
-// .mat-toolbar.mat-primary {
-//   background-color: rgb(25, 118, 210); /* Example shade */
-//   color: rgb(255, 255, 255);
-// }
-
 :host {
   display: block;
   padding-top: 64px; /* Matches the height of mat-toolbar */
+  background: var(--background); /* Apply global background */
+  color: var(--text-color); /* Apply global text color */
+  min-height: 100vh; /* Ensure full viewport height */
+  transition: all 0.3s ease; /* Smooth theme transition */
 }

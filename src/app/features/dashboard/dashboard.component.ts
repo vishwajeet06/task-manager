@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Store } from '@ngrx/store';
-// import { Chart } from 'chart.js';
 import Chart, { ChartConfiguration } from 'chart.js/auto';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { PriorityCounts, StatusCounts, Task } from '../../core/models/task';
-// import { TaskActions } from '../../core/state/task.actions';
 import {
   selectAllTasks,
   selectTasksLoading,
@@ -24,14 +23,16 @@ import { selectActivities } from '../../core/state/activity.selectors';
 import { loadTasks } from '../../core/state/task.actions';
 import { MatIconModule } from '@angular/material/icon';
 import { loadActivities } from '../../core/state/activity.actions';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, BaseChartDirective, MatIconModule],
+  imports: [CommonModule, BaseChartDirective, MatIconModule, ScrollingModule],
   providers: [provideCharts(withDefaultRegisterables())],
   templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.scss',
+  styleUrls: ['./dashboard.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DashboardComponent implements OnInit {
   tasks$!: Observable<Task[]>;
@@ -69,15 +70,18 @@ export class DashboardComponent implements OnInit {
     plugins: {
       legend: {
         position: 'top',
+        labels: {
+          color: 'var(--text-color)', // Theme-aware legend text
+        },
       },
     },
   };
 
   retryLoading(): void {
+    this.store.dispatch(loadTasks());
     this.store.dispatch(loadActivities());
   }
 
-  // Determine the icon based on the activity action
   getIcon(action: string): string {
     switch (action) {
       case 'Task Created':
@@ -91,7 +95,6 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  // Determine the icon class for styling based on the activity action
   getIconClass(action: string): string {
     switch (action) {
       case 'Task Created':
@@ -114,9 +117,17 @@ export class DashboardComponent implements OnInit {
     this.totalTasks$ = this.store.select(selectTotalTasks);
     this.completedTasks$ = this.store.select(selectCompletedTasks);
     this.overdueTasks$ = this.store.select(selectOverdueTasks);
-    this.activities$ = this.store.select(selectActivities);
+    this.activities$ = this.store
+      .select(selectActivities)
+      .pipe(
+        map((activities) =>
+          [...activities].sort(
+            (a, b) =>
+              new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+          )
+        )
+      );
 
-    // Ensure tasks are loaded
     this.store.dispatch(loadTasks());
     this.store.dispatch(loadActivities());
 
