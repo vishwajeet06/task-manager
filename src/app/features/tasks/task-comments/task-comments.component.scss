@@ -2,28 +2,29 @@
   margin: 12px 0;
   padding: 8px;
   border-radius: 8px;
-  background: #ffffff;
+  background: var(--card-bg); // Theme-aware background
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  color: var(--text-color); // Theme-aware text
 
   .comments-header {
     display: flex;
     align-items: center;
     margin-bottom: 24px;
     padding-bottom: 12px;
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid var(--divider-color); // Theme-aware divider
 
     h3 {
       font-size: 1.5rem;
       font-weight: 500;
-      color: #303f9f; // indigo-800 equivalent
+      color: var(--primary); // Theme-aware primary color
       margin: 0;
     }
 
     .comment-count {
       margin-left: 12px;
       font-size: 0.875rem;
-      color: #757575; // gray-600 equivalent
-      background: #f5f5f5; // gray-100 equivalent
+      color: var(--text-secondary); // Theme-aware secondary text
+      background: rgba(255, 255, 255, 0.1); // Theme-aware light background
       padding: 4px 8px;
       border-radius: 12px;
     }
@@ -40,11 +41,11 @@
       width: 6px;
     }
     &::-webkit-scrollbar-track {
-      background: #f1f1f1;
+      background: var(--card-bg); // Theme-aware track
       border-radius: 10px;
     }
     &::-webkit-scrollbar-thumb {
-      background: #bdbdbd; // gray-400 equivalent
+      background: var(--divider-color); // Theme-aware thumb
       border-radius: 10px;
     }
 
@@ -53,11 +54,12 @@
       border-radius: 8px;
       transition: all 0.3s ease;
       border-left: 3px solid transparent;
-      position: relative; // For absolute positioning of actions
+      position: relative;
+      background: var(--card-bg); // Theme-aware card background
 
       &:hover {
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-        border-left-color: #3f51b5; // indigo-500 equivalent
+        border-left-color: var(--primary); // Theme-aware hover border
       }
 
       .comment-avatar {
@@ -76,6 +78,7 @@
         display: flex;
         align-items: flex-start;
         padding: 8px;
+        background: var(--card-bg); // Ensure header matches card background
 
         .header-content {
           flex: 1;
@@ -84,12 +87,12 @@
           .comment-author {
             font-size: 0.95rem;
             font-weight: 600;
-            color: #424242; // gray-800 equivalent
+            color: var(--text-color); // Theme-aware text
           }
 
           .comment-time {
             font-size: 0.75rem;
-            color: #9e9e9e; // gray-500 equivalent
+            color: var(--text-secondary); // Theme-aware secondary text
           }
         }
 
@@ -112,15 +115,15 @@
             transition: all 0.2s ease;
 
             &.edit-btn {
-              color: #1e88e5; // blue-600 equivalent
+              color: var(--accent); // Theme-aware edit color
             }
 
             &.delete-btn {
-              color: #e53935; // red-600 equivalent
+              color: var(--error-bg); // Theme-aware delete color
             }
 
             &:hover {
-              background: rgba(0, 0, 0, 0.04);
+              background: rgba(255, 255, 255, 0.1); // Theme-aware hover
               transform: scale(1.1);
             }
           }
@@ -130,12 +133,13 @@
       .comment-content {
         margin-top: 8px;
         padding: 0 16px 8px 16px;
+        background: var(--card-bg); // Ensure content matches card background
 
         .comment-text {
           margin: 0;
           font-size: 0.9rem;
           line-height: 1.5;
-          color: #616161; // gray-700 equivalent
+          color: var(--text-color); // Theme-aware text
           white-space: pre-wrap;
           word-break: break-word;
         }
@@ -145,14 +149,14 @@
     .no-comments {
       text-align: center;
       padding: 32px 16px;
-      color: #9e9e9e; // gray-500 equivalent
+      color: var(--text-secondary); // Theme-aware secondary text
 
       .empty-icon {
         font-size: 48px;
         width: 48px;
         height: 48px;
         margin-bottom: 16px;
-        color: #e0e0e0; // gray-300 equivalent
+        color: var(--divider-color); // Theme-aware divider color
       }
 
       p {
@@ -179,6 +183,13 @@
         font-size: 14px;
         line-height: 1.5;
         padding: 12px;
+        background-color: rgba(0, 0, 0, 0.04); // Light mode subtle gray
+        color: var(--text-color); // Theme-aware text color
+      }
+
+      &.dark-theme textarea {
+        background-color: rgba(255, 255, 255, 0.1); // Dark mode light gray
+        color: var(--text-color); // Ensure text is visible in dark mode
       }
     }
 
@@ -214,12 +225,12 @@
 
         &:hover {
           transform: translateY(-1px);
-          box-shadow: 0 2px 8px rgba(114, 230, 37, 0.1);
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
         &:disabled {
-          background-color: rgba(227, 156, 156, 0.12);
-          color: rgba(0, 0, 0, 0.26);
+          background-color: var(--disabled-bg); // Theme-aware disabled
+          color: var(--text-disabled); // Theme-aware disabled text
         }
       }
     }

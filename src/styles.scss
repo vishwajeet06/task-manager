@@ -3,22 +3,70 @@
 @import "quill/dist/quill.snow.css";
 
 /* Global CSS Variables */
+// :root {
+//   --background: #ffffff;
+//   --text-color: #333333;
+//   --text-secondary: rgba(0, 0, 0, 0.6); /* Secondary text color */
+//   --divider-color: #e0e0e0; /* Divider/border color */
+//   --primary: #00695c;
+//   --accent: #3f51b1;
+//   --success-bg: #4caf50;
+//   --error-bg: #f44336;
+//   --card-bg: #ffffff;
+//   --secondary: #e0e0e0; /* Secondary button color */
+//   --secondary-hover: #d5d5d5; /* Secondary button hover */
+//   --disabled-bg: #cccccc; /* Disabled button background */
+//   --text-disabled: #666; /* Disabled button text */
+// }
+
+// .dark-theme {
+//   --background: #1e1e1e;
+//   --text-color: #e0e0e0;
+//   --text-secondary: rgba(255, 255, 255, 0.7);
+//   --divider-color: #444;
+//   --primary: #00c853;
+//   --accent: #7e57c2;
+//   --success-bg: #388e3c;
+//   --error-bg: #d32f2f;
+//   --card-bg: #2c2c2c;
+//   --secondary: #424242;
+//   --secondary-hover: #616161;
+//   --disabled-bg: #757575;
+//   --text-disabled: #999;
+// }
+
 :root {
-  --background: #ffffff;
-  --text-color: #333333;
-  --primary: #00695c;
-  --accent: #3f51b1;
-  --success-bg: #4caf50;
-  --error-bg: #f44336;
+  /* Light Theme */
+  --background: #fef6ee;
+  --text-color: #431407;
+  --text-secondary: #9a3412;
+  --divider-color: #ffedd5;
+  --primary: #ea580c; /* Sunset orange */
+  --accent: #db2777; /* Pink accent */
+  --success-bg: #16a34a;
+  --error-bg: #dc2626;
+  --card-bg: #ffffff;
+  --secondary: #fbcfe8;
+  --secondary-hover: #f9a8d4;
+  --disabled-bg: #fecaca;
+  --text-disabled: #9a3412;
 }
 
 .dark-theme {
-  --background: #1e1e1e;
-  --text-color: #e0e0e0;
-  --primary: #00c853;
-  --accent: #7e57c2;
-  --success-bg: #388e3c;
-  --error-bg: #d32f2f;
+  /* Dark Theme */
+  --background: #1e1b4b;
+  --text-color: #fef3c7;
+  --text-secondary: #a5b4fc;
+  --divider-color: #4c1d95;
+  --primary: #7c3aed; /* Purple */
+  --accent: #db2777;
+  --success-bg: #34d399;
+  --error-bg: #f87171;
+  --card-bg: #312e81;
+  --secondary: #5b21b6;
+  --secondary-hover: #6d28d9;
+  --disabled-bg: #9333ea;
+  --text-disabled: #a5b4fc;
 }
 
 html,
@@ -31,7 +79,7 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
   background: var(--background);
   color: var(--text-color);
-  transition: all 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Global Material Input Styling */
@@ -42,11 +90,56 @@ mat-form-field {
 mat-form-field .mat-input-element {
   background-color: rgba(0, 0, 0, 0.04); /* Light mode: subtle gray */
   color: var(--text-color);
+  border-radius: 4px;
+  padding: 4px;
 }
 
 .dark-theme mat-form-field .mat-input-element {
   background-color: rgba(255, 255, 255, 0.1); /* Dark mode: light gray */
   color: var(--text-color);
+}
+
+/* Global Button Styling */
+button.mat-button,
+button.mat-raised-button {
+  border-radius: 4px;
+  padding: 8px 16px;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  &.mat-primary {
+    background-color: var(--primary);
+    color: var(--text-color);
+
+    &:hover {
+      background-color: var(--primary), 5%;
+    }
+  }
+
+  &.mat-secondary {
+    background-color: var(--secondary);
+    color: var(--text-color);
+
+    &:hover {
+      background-color: var(--secondary-hover);
+    }
+  }
+
+  &:disabled {
+    background-color: var(--disabled-bg);
+    color: var(--text-disabled);
+    cursor: not-allowed;
+  }
+}
+
+/* Dialog Container Override */
+::ng-deep .mat-dialog-container {
+  background-color: var(--card-bg) !important;
+  color: var(--text-color) !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 /* Snackbar Styles with Theme Variables */

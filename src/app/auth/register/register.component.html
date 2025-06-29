@@ -1,6 +1,10 @@
 <div class="register-container">
   <h2>Register (Admin Only)</h2>
-  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+  <form
+    [formGroup]="registerForm"
+    (ngSubmit)="onSubmit()"
+    aria-label="Register form"
+  >
     <mat-form-field appearance="fill">
       <mat-label>Email</mat-label>
       <input
@@ -9,6 +13,7 @@
         type="email"
         formControlName="email"
         required
+        aria-required="true"
       />
       <mat-error *ngIf="registerForm.get('email')?.hasError('required')">
         Email is required
@@ -26,6 +31,7 @@
         type="password"
         formControlName="password"
         required
+        aria-required="true"
       />
       <mat-error *ngIf="registerForm.get('password')?.hasError('required')">
         Password is required
@@ -40,13 +46,14 @@
         type="text"
         formControlName="userName"
         required
+        aria-required="true"
       />
       <mat-error *ngIf="registerForm.get('userName')?.hasError('required')">
         Username is required
       </mat-error>
     </mat-form-field>
 
-    <div *ngIf="errorMessage" class="error-message">
+    <div *ngIf="errorMessage" class="error-message" role="alert">
       {{ errorMessage }}
     </div>
 
@@ -55,9 +62,13 @@
       color="primary"
       type="submit"
       [disabled]="registerForm.invalid"
+      aria-label="Submit registration"
     >
       Register
     </button>
   </form>
-  <p>Already have an account? <a routerLink="/login">Login here</a></p>
+  <p>
+    Already have an account?
+    <a routerLink="/login" aria-label="Login here">Login here</a>
+  </p>
 </div>

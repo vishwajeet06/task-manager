@@ -1,12 +1,24 @@
 <header class="page-header">
   <h1>Dashboard</h1>
 </header>
-<div *ngIf="loading$ | async; else dashboardContent">
+<div
+  *ngIf="loading$ | async; else dashboardContent"
+  class="loading"
+  aria-live="polite"
+>
   <p>Loading tasks...</p>
 </div>
 <ng-template #dashboardContent>
-  <div *ngIf="error$ | async as error">
+  <div *ngIf="error$ | async as error" class="error-message" role="alert">
     <p>Error: {{ error }}</p>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="retryLoading()"
+      aria-label="Retry loading data"
+    >
+      Retry
+    </button>
   </div>
   <div class="metrics">
     <div class="metric-card total">
@@ -30,8 +42,8 @@
         [data]="statusChartData"
         [type]="statusChartType"
         [options]="chartOptions"
-      >
-      </canvas>
+        aria-label="Chart of tasks by status"
+      ></canvas>
     </div>
     <div class="chart-card">
       <h2>Tasks by Priority</h2>
@@ -40,23 +52,28 @@
         [data]="priorityChartData"
         [type]="priorityChartType"
         [options]="chartOptions"
-      >
-      </canvas>
+        aria-label="Chart of tasks by priority"
+      ></canvas>
     </div>
   </div>
   <div class="timeline">
     <h2>Recent Activity</h2>
-    <div *ngIf="error$ | async as error" class="error-message">
+    <div *ngIf="error$ | async as error" class="error-message" role="alert">
       <p>Error logging activity: {{ error }}</p>
-      <button mat-raised-button color="primary" (click)="retryLoading()">
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="retryLoading()"
+        aria-label="Retry loading activity"
+      >
         Retry
       </button>
     </div>
-    <div *ngIf="(activities$ | async)?.length === 0">
+    <div *ngIf="(activities$ | async)?.length === 0" class="no-activity">
       <p>No recent activity.</p>
     </div>
-    <ul>
-      <li *ngFor="let activity of activities$ | async" class="activity-item">
+    <div class="activity-container">
+      <div *ngFor="let activity of activities$ | async" class="activity-item">
         <mat-icon [ngClass]="getIconClass(activity.action)">
           {{ getIcon(activity.action) }}
         </mat-icon>
@@ -66,7 +83,7 @@
           }}</span>
           <span class="message" [innerHTML]="activity.details"></span>
         </div>
-      </li>
-    </ul>
+      </div>
+    </div>
   </div>
 </ng-template>

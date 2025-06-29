@@ -1,5 +1,5 @@
 import { QuillModule } from 'ngx-quill';
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
 import {
   MatDialogRef,
   MAT_DIALOG_DATA,
@@ -38,7 +38,8 @@ import { CommonModule } from '@angular/common';
     CommonModule,
   ],
   templateUrl: './task-dialog.component.html',
-  styleUrl: './task-dialog.component.scss',
+  styleUrls: ['./task-dialog.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TaskDialogComponent {
   task: Omit<Task, 'id'>;
@@ -69,9 +70,9 @@ export class TaskDialogComponent {
         dueDate: data.dueDate,
         status: data.status,
         category: data.category,
-        tags: data.tags,
+        tags: [...data.tags], // Create a copy to avoid reference issues
         assignedTo: data.assignedTo,
-        attachments: data.attachments,
+        attachments: [...data.attachments], // Create a copy to avoid reference issues
         uniqueId: data.uniqueId,
       };
       this.dueDate = new Date(data.dueDate);
